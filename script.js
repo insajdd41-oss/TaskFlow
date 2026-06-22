@@ -148,6 +148,82 @@ function clearCompleted() {
     renderTasks();
 }
 
+// ===== ДИАГРАММА ПРОДУКТИВНОСТИ =====
+
+// Получить статистику по дням недели
+function getWeeklyStats() {
+    const days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
+    const stats = [0, 0, 0, 0, 0, 0, 0];
+    
+    // Получаем все выполненные задачи
+    const completedTasks = tasks.filter(t => t.completed);
+    
+    // Текущая дата
+    const today = new Date();
+    const todayDay = today.getDay(); // 0 = воскресенье
+    
+    // Для каждой выполненной задачи проверяем, когда она была выполнена
+    completedTasks.forEach(task => {
+        if (task.completedAt) {
+            const taskDate = new Date(task.completedAt);
+            // Проверяем, что задача выполнена в течение последних 7 дней
+            const diffDays = Math.floor((today - taskDate) / (1000 * 60 * 60 * 24));
+            if (diffDays < 7 && diffDays >= 0) {
+                // Определяем день недели (понедельник = 0)
+                let dayIndex = taskDate.getDay() - 1;
+                if (dayIndex < 0) dayIndex = 6; // воскресенье → 6
+                stats[dayIndex]++;
+            }
+        }
+    });
+    
+    // Сдвигаем так, чтобы сегодня был последним днём
+    const todayIndex = todayDay === 0 ? 6 : todayDay - 1;
+    const shiftedStats = [];
+    const shiftedLabels = [];
+    
+    for (let i = 0; i < 7; i++) {
+        const idx = (todayIndex - 6 + i + 7) % 7;
+        shiftedStats.push(stats[idx]);
+        const label = days[idx];
+        shiftedLabels.push(i === 6 ? label + ' 🎯' : label);
+    }
+    
+    return { stats: shiftedStats, labels: shiftedLabels };
+}
+
+// Отрисовать диаграмму
+function renderChart() {
+    const chartBars = document.getElementById('chartBars');
+    const chartLabels = document.getElementById('chartLabels');
+    
+    if (!chartBars || !chartLabels) return;
+    
+    const { stats, labels } = getWeeklyStats();
+    const maxVal = Math.max(...stats, 1); // минимум 1, чтобы не делить на ноль
+    
+    // Отрисовка столбцов
+    chartBars.innerHTML = stats.map((val, index) => {
+        const heightPercent = (val / maxVal) * 100;
+        const isToday = index === 6;
+        const barClass = isToday ? 'chart-bar' : 'chart-bar green-bar';
+        
+        return `
+            <div class="chart-bar-wrapper">
+                <span class="chart-bar-value">${val}</span>
+                <div class="${barClass}" style="height: ${Math.max(heightPercent, 5)}%;"></div>
+            </div>
+        `;
+    }).join('');
+    
+    // Отрисовка подписей
+    chartLabels.innerHTML = labels.map((label, index) => {
+        const isToday = index === 6;
+        return `<span class="chart-label ${isToday ? 'today' : ''}">${label}</span>`;
+    }).join('');
+}
+
+
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
