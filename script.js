@@ -15,6 +15,7 @@ function loadTasks() {
 function saveTasks() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     updateStats();
+    renderChart(); // Обновляем диаграмму
 }
 
 // Рендер задач
@@ -46,6 +47,7 @@ function renderTasks() {
     
     attachTaskEvents();
     updateStats();
+    renderChart(); // Обновляем диаграмму
 }
 
 // Экранирование HTML
@@ -68,6 +70,12 @@ function attachTaskEvents() {
             const task = tasks.find(t => t.id === id);
             if (task) {
                 task.completed = checkbox.checked;
+                // Если задача выполнена — записываем дату
+                if (task.completed) {
+                    task.completedAt = new Date().toISOString();
+                } else {
+                    task.completedAt = null;
+                }
                 saveTasks();
                 renderTasks();
             }
@@ -129,7 +137,8 @@ function addTask() {
         id: Date.now(),
         text: text,
         completed: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        completedAt: null // Дата выполнения
     });
     
     input.value = '';
@@ -223,7 +232,6 @@ function renderChart() {
     }).join('');
 }
 
-
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
@@ -257,4 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderTasks();
         });
     });
+    
+    // Отрисовка диаграммы при загрузке
+    renderChart();
 });
