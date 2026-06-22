@@ -296,3 +296,116 @@ if (themeToggle) {
         }
     });
 }
+// ================================================================
+// ===== ПАСХАЛКА — БРЕЙНРОТ МЕМ 67 (ИСПРАВЛЕННАЯ) =====
+// ================================================================
+
+function showBrainrotMeme() {
+    // Проверяем, не открыта ли уже
+    if (document.querySelector('.easter-egg-overlay')) {
+        return;
+    }
+
+    console.log('🎉 Показываем пасхалку!');
+
+    // Создаём оверлей
+    const overlay = document.createElement('div');
+    overlay.className = 'easter-egg-overlay active'; // Сразу добавляем класс active
+    overlay.id = 'easterEggOverlay';
+    overlay.innerHTML = `
+        <button class="easter-egg-close" id="easterEggClose">✕</button>
+        <div class="easter-egg-content">
+            <div class="easter-egg-meme">🤡🔥💀</div>
+            <div class="easter-egg-text">БРЕЙНРОТ 67 💀</div>
+            <div class="easter-egg-subtext">Ты нашёл пасхалку! 🎉</div>
+            <div style="margin-top: 30px; font-size: 3rem; animation: brainrotShake 2s ease-in-out infinite;">
+                🗿 Skibidi Toilet Rizz 🗿
+            </div>
+            <div style="margin-top: 15px; color: #666; font-size: 0.9rem; letter-spacing: 2px;">
+                ═══════ ⋆★⋆ ═══════
+            </div>
+            <div style="margin-top: 15px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <span style="font-size: 2rem;">🧠</span>
+                <span style="font-size: 2rem; animation: brainrotPulse 1.5s ease-in-out infinite;">⚡</span>
+                <span style="font-size: 2rem;">🤯</span>
+                <span style="font-size: 2rem; animation: brainrotPulse 2s ease-in-out infinite;">🌀</span>
+                <span style="font-size: 2rem;">👾</span>
+            </div>
+            <div style="margin-top: 20px; color: #555; font-size: 0.8rem;">
+                (нажмите ✕ или кликните в любом месте, чтобы закрыть)
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Закрытие по клику на крестик
+    const closeBtn = document.getElementById('easterEggClose');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeEasterEgg();
+        });
+    }
+
+    // Закрытие по клику на оверлей (не на контент)
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            closeEasterEgg();
+        }
+    });
+
+    // Закрытие по Escape
+    document.addEventListener('keydown', handleEscape);
+    
+    // Блокировка скролла
+    document.body.style.overflow = 'hidden';
+}
+
+function closeEasterEgg() {
+    const overlay = document.querySelector('.easter-egg-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+    document.removeEventListener('keydown', handleEscape);
+    document.body.style.overflow = '';
+    console.log('❌ Пасхалка закрыта');
+}
+
+function handleEscape(e) {
+    if (e.key === 'Escape') {
+        closeEasterEgg();
+    }
+}
+
+function initEasterEgg() {
+    const title = document.getElementById('easterEggTitle');
+    
+    if (!title) {
+        console.warn('⚠️ Заголовок #easterEggTitle не найден');
+        return;
+    }
+    
+    let clickCount = 0;
+    let clickTimer = null;
+
+    title.addEventListener('click', function() {
+        clickCount++;
+        console.log('👆 Клик по заголовку! Счётчик:', clickCount);
+        
+        clearTimeout(clickTimer);
+        
+        if (clickCount >= 3) {
+            console.log('🎉 Запускаем пасхалку!');
+            showBrainrotMeme();
+            clickCount = 0;
+        } else {
+            clickTimer = setTimeout(function() {
+                clickCount = 0;
+                console.log('🔄 Сброс счётчика');
+            }, 1000);
+        }
+    });
+    
+    console.log('✅ Пасхалка инициализирована! Кликни 3 раза по заголовку.');
+}
