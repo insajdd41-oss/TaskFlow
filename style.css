@@ -630,3 +630,262 @@ body.dark-theme .theme-toggle {
 .theme-transition {
     transition: background 0.4s ease, color 0.3s ease;
 }
+/* ================================================================ */
+/* ========== ТЕМНАЯ ТЕМА (Dark Mode) ========== */
+/* ================================================================ */
+
+/* ---------- Активация через класс на body ---------- */
+body.dark-theme {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 40%, #0d1a1a 100%);
+    color: #e0e0e0;
+}
+
+/* ---------- МЕНЮ ---------- */
+body.dark-theme .fixed-menu {
+    background: rgba(13, 13, 26, 0.97);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(90deg, #FF6B8A, #4ECDC4) 1;
+}
+
+body.dark-theme .menu-logo {
+    color: #FF6B8A;
+}
+
+body.dark-theme .menu-links a {
+    color: #bbbbbb;
+}
+
+body.dark-theme .menu-links a:hover {
+    color: #FF6B8A;
+    background: rgba(255, 107, 138, 0.15);
+}
+
+/* ---------- КАРТОЧКИ (Hero, Задачи, Статистика, Статья) ---------- */
+body.dark-theme .hero-section,
+body.dark-theme .tasks-section,
+body.dark-theme .stats-section,
+body.dark-theme .about-section {
+    background: rgba(25, 25, 50, 0.92);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .hero-section h1 {
+    background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.dark-theme .subtitle {
+    color: #999999;
+}
+
+/* ---------- ЗАГОЛОВКИ ---------- */
+body.dark-theme .tasks-section h2,
+body.dark-theme .stats-section h2,
+body.dark-theme .about-section h2,
+body.dark-theme .chart-section h3 {
+    color: #f0f0f0;
+}
+
+/* ---------- ПОЛЕ ВВОДА ---------- */
+body.dark-theme #taskInput {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 107, 138, 0.25);
+    color: #e0e0e0;
+}
+
+body.dark-theme #taskInput:focus {
+    border-color: #FF6B8A;
+    box-shadow: 0 0 25px rgba(255, 107, 138, 0.12);
+}
+
+body.dark-theme #taskInput::placeholder {
+    color: #666666;
+}
+
+/* ---------- КНОПКА ДОБАВЛЕНИЯ ---------- */
+body.dark-theme #addTaskBtn {
+    background: linear-gradient(135deg, #FF6B8A, #d94f6e);
+}
+
+body.dark-theme #addTaskBtn:hover {
+    box-shadow: 0 5px 25px rgba(255, 107, 138, 0.35);
+    transform: scale(1.03);
+}
+
+/* ---------- ФИЛЬТРЫ ---------- */
+body.dark-theme .filter-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #bbbbbb;
+}
+
+body.dark-theme .filter-btn.active {
+    background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
+    color: white;
+    border-color: transparent;
+}
+
+body.dark-theme .filter-btn:hover:not(.active) {
+    border-color: #FF6B8A;
+    background: rgba(255, 107, 138, 0.08);
+}
+
+/* ---------- СПИСОК ЗАДАЧ ---------- */
+body.dark-theme .task-item {
+    background: rgba(255, 255, 255, 0.04);
+    border-left-color: #FF6B8A;
+}
+
+body.dark-theme .task-item:nth-child(odd) {
+    border-left-color: #4ECDC4;
+}
+
+body.dark-theme .task-item.completed {
+    background: rgba(78, 205, 196, 0.07);
+    border-left-color: #4ECDC4;
+    opacity: 0.75;
+}
+
+body.dark-theme .task-item.completed .task-text {
+    color: #777777;
+}
+
+body.dark-theme .task-text {
+    color: #e0e0e0;
+}
+
+/* ---------- ЧЕКБОКС ---------- */
+body.dark-theme .task-checkbox {
+    accent-color: #FF6B8A;
+}
+
+body.dark-theme .task-checkbox:checked {
+    accent-color: #4ECDC4;
+}
+
+/* ---------- КНОПКА УДАЛЕНИЯ ---------- */
+body.dark-theme .task-delete:hover {
+    background: rgba(255, 107, 138, 0.18);
+}
+
+/* ---------- КНОПКА ОЧИСТКИ ---------- */
+body.dark-theme .clear-btn {
+    background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
+}
+
+body.dark-theme .clear-btn:hover {
+    opacity: 0.85;
+}
+
+/* ---------- СТАТИСТИКА ---------- */
+body.dark-theme .stat-item.pink-bg {
+    background: linear-gradient(135deg, rgba(255, 107, 138, 0.15), rgba(255, 143, 163, 0.08));
+    color: #ff8fa3;
+}
+
+body.dark-theme .stat-item.green-bg {
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(108, 212, 197, 0.08));
+    color: #6cd4c5;
+}
+
+body.dark-theme .stat-item.gradient-bg {
+    background: linear-gradient(135deg, rgba(255, 107, 138, 0.08), rgba(78, 205, 196, 0.08));
+    color: #bbbbbb;
+}
+
+/* ---------- ДИАГРАММА ---------- */
+body.dark-theme .chart-section {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .chart-bars {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .chart-bar-value {
+    color: #aaaaaa;
+}
+
+body.dark-theme .chart-label {
+    color: #888888;
+}
+
+body.dark-theme .chart-label.today {
+    color: #FF6B8A;
+}
+
+/* ---------- 3D КУБ ---------- */
+body.dark-theme .face {
+    background: linear-gradient(135deg, #2a2a5e, #1a3a3a);
+    border-color: rgba(255, 255, 255, 0.10);
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .cube-text {
+    color: #888888;
+}
+
+/* ---------- СТАТЬЯ ---------- */
+body.dark-theme .article-content p {
+    color: #bbbbbb;
+}
+
+/* ---------- ФУТЕР ---------- */
+body.dark-theme .footer {
+    background: rgba(20, 20, 40, 0.85);
+    color: #777777;
+}
+
+/* ---------- ПУСТОЕ СОСТОЯНИЕ ---------- */
+body.dark-theme .empty-state {
+    color: #777777;
+}
+
+/* ---------- КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ ---------- */
+body.dark-theme .theme-toggle {
+    color: #f0f0f0;
+}
+
+/* ---------- ПЛАВНЫЙ ПЕРЕХОД ---------- */
+body.dark-theme,
+body.dark-theme .fixed-menu,
+body.dark-theme .hero-section,
+body.dark-theme .tasks-section,
+body.dark-theme .stats-section,
+body.dark-theme .about-section,
+body.dark-theme .task-item,
+body.dark-theme .chart-section,
+body.dark-theme .chart-bars {
+    transition: background 0.5s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ================================================================ */
+/* ========== АДАПТИВ ТЕМНОЙ ТЕМЫ ========== */
+/* ================================================================ */
+
+@media (max-width: 768px) {
+    body.dark-theme .fixed-menu {
+        background: rgba(13, 13, 26, 0.98);
+    }
+    
+    body.dark-theme .hero-section,
+    body.dark-theme .tasks-section,
+    body.dark-theme .stats-section,
+    body.dark-theme .about-section {
+        background: rgba(20, 20, 45, 0.95);
+    }
+}
+
+@media (max-width: 480px) {
+    body.dark-theme .hero-section,
+    body.dark-theme .tasks-section,
+    body.dark-theme .stats-section,
+    body.dark-theme .about-section {
+        background: rgba(18, 18, 40, 0.97);
+    }
+}
