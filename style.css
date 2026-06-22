@@ -493,3 +493,115 @@ body {
         font-size: 0.9rem;
     }
 }
+/* ===== ДИАГРАММА ПРОДУКТИВНОСТИ ===== */
+.chart-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+}
+
+.chart-section h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-bars {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    width: 100%;
+    height: 150px;
+    padding: 10px 5px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 15px;
+    gap: 5px;
+}
+
+.chart-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.chart-bar {
+    width: 100%;
+    max-width: 40px;
+    min-height: 4px;
+    border-radius: 8px 8px 0 0;
+    transition: height 0.8s ease;
+    background: linear-gradient(180deg, #FF6B8A, #FF8FA3);
+    position: relative;
+}
+
+.chart-bar.green-bar {
+    background: linear-gradient(180deg, #4ECDC4, #6CD4C5);
+}
+
+.chart-bar-value {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 0 5px;
+}
+
+.chart-label {
+    flex: 1;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 500;
+}
+
+.chart-label.today {
+    color: #FF6B8A;
+    font-weight: bold;
+}
+
+/* Адаптив для диаграммы */
+@media (max-width: 600px) {
+    .chart-bars {
+        height: 120px;
+    }
+    
+    .chart-bar {
+        max-width: 30px;
+    }
+    
+    .chart-label {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .chart-bars {
+        height: 100px;
+    }
+    
+    .chart-bar {
+        max-width: 25px;
+    }
+    
+    .chart-label {
+        font-size: 0.55rem;
+    }
+}
