@@ -889,3 +889,159 @@ body.dark-theme .chart-bars {
         background: rgba(18, 18, 40, 0.97);
     }
 }
+/* ================================================================ */
+/* ===== ПАСХАЛКА — ИСПРАВЛЕННАЯ ===== */
+/* ================================================================ */
+
+.easter-egg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    display: none !important;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 99999;
+    padding: 20px;
+}
+
+.easter-egg-overlay.active {
+    display: flex !important;
+    animation: brainrotFadeIn 0.5s ease;
+}
+
+@keyframes brainrotFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.easter-egg-content {
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+    animation: brainrotPulse 2s ease-in-out infinite;
+}
+
+@keyframes brainrotPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.easter-egg-meme {
+    font-size: 8rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    animation: brainrotShake 3s ease-in-out infinite;
+}
+
+@keyframes brainrotShake {
+    0%, 100% {
+        transform: rotate(-3deg) scale(1);
+    }
+    25% {
+        transform: rotate(3deg) scale(1.05);
+    }
+    50% {
+        transform: rotate(-3deg) scale(1);
+    }
+    75% {
+        transform: rotate(3deg) scale(1.05);
+    }
+}
+
+.easter-egg-text {
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-shadow: 0 0 30px rgba(255, 107, 138, 0.5);
+    margin-bottom: 10px;
+    animation: brainrotTextGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes brainrotTextGlow {
+    0% {
+        text-shadow: 0 0 20px #FF6B8A, 0 0 40px #FF6B8A;
+        color: #FF6B8A;
+    }
+    50% {
+        text-shadow: 0 0 30px #4ECDC4, 0 0 60px #4ECDC4;
+        color: #4ECDC4;
+    }
+    100% {
+        text-shadow: 0 0 20px #FFD93D, 0 0 40px #FFD93D;
+        color: #FFD93D;
+    }
+}
+
+.easter-egg-subtext {
+    color: #888;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    opacity: 0.7;
+}
+
+.easter-egg-close {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 2rem;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 100000;
+}
+
+.easter-egg-close:hover {
+    background: rgba(255, 107, 138, 0.3);
+    border-color: #FF6B8A;
+    transform: rotate(90deg);
+}
+
+/* Брейкпоинты для адаптива */
+@media (max-width: 768px) {
+    .easter-egg-meme {
+        font-size: 4rem;
+    }
+    
+    .easter-egg-text {
+        font-size: 1.8rem;
+    }
+    
+    .easter-egg-subtext {
+        font-size: 1rem;
+    }
+    
+    .easter-egg-close {
+        top: 15px;
+        right: 15px;
+        font-size: 1.5rem;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .easter-egg-meme {
+        font-size: 3rem;
+    }
+    
+    .easter-egg-text {
+        font-size: 1.4rem;
+    }
+}
