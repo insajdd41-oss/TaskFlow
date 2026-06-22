@@ -269,3 +269,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // Отрисовка диаграммы при загрузке
     renderChart();
 });
+/* ===== КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ ===== */
+.theme-toggle {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 107, 138, 0.12);
+    transform: rotate(20deg) scale(1.1);
+}
+
+body.dark-theme .theme-toggle {
+    color: #f0f0f0;
+}
+
+.theme-transition {
+    transition: background 0.4s ease, color 0.3s ease;
+}
