@@ -298,3 +298,100 @@ if (themeToggle) {
         }
     });
 }
+// ================================================================
+// ===== ПАСХАЛКА — БРЕЙНРОТ МЕМ 67 =====
+// ================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    const title = document.getElementById('easterEggTitle');
+    let clickCount = 0;
+    let clickTimer = null;
+
+    if (title) {
+        title.addEventListener('click', () => {
+            clickCount++;
+            
+            // Сброс таймера
+            clearTimeout(clickTimer);
+            
+            // Если кликнули 3 раза подряд быстро — запускаем пасхалку
+            if (clickCount >= 3) {
+                showBrainrotMeme();
+                clickCount = 0;
+            } else {
+                // Если не добрали клики — сбрасываем через 1 секунду
+                clickTimer = setTimeout(() => {
+                    clickCount = 0;
+                }, 1000);
+            }
+        });
+    }
+});
+
+// Функция показа пасхалки
+function showBrainrotMeme() {
+    // Проверяем, не открыта ли уже
+    if (document.querySelector('.easter-egg-overlay')) {
+        return;
+    }
+
+    // Создаём оверлей
+    const overlay = document.createElement('div');
+    overlay.className = 'easter-egg-overlay active';
+    overlay.innerHTML = `
+        <button class="easter-egg-close" id="easterEggClose">✕</button>
+        <div class="easter-egg-content">
+            <div class="easter-egg-meme">🤡🔥💀</div>
+            <div class="easter-egg-text">БРЕЙНРОТ 67 💀</div>
+            <div class="easter-egg-subtext">Ты нашёл пасхалку! 🎉</div>
+            <div style="margin-top: 30px; font-size: 3rem; animation: brainrotShake 2s ease-in-out infinite;">
+                🗿 Skibidi Toilet Rizz 🗿
+            </div>
+            <div style="margin-top: 15px; color: #666; font-size: 0.9rem; letter-spacing: 2px;">
+                ═══════ ⋆★⋆ ═══════
+            </div>
+            <div style="margin-top: 15px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <span style="font-size: 2rem;">🧠</span>
+                <span style="font-size: 2rem; animation: brainrotPulse 1.5s ease-in-out infinite;">⚡</span>
+                <span style="font-size: 2rem;">🤯</span>
+                <span style="font-size: 2rem; animation: brainrotPulse 2s ease-in-out infinite;">🌀</span>
+                <span style="font-size: 2rem;">👾</span>
+            </div>
+            <div style="margin-top: 20px; color: #555; font-size: 0.8rem;">
+                (нажмите ✕ или кликните в любом месте, чтобы закрыть)
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Закрытие по клику на крестик
+    const closeBtn = document.getElementById('easterEggClose');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeEasterEgg);
+    }
+
+    // Закрытие по клику на оверлей (не на контент)
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeEasterEgg();
+        }
+    });
+
+    // Закрытие по Escape
+    document.addEventListener('keydown', handleEscape);
+}
+
+function closeEasterEgg() {
+    const overlay = document.querySelector('.easter-egg-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+    document.removeEventListener('keydown', handleEscape);
+}
+
+function handleEscape(e) {
+    if (e.key === 'Escape') {
+        closeEasterEgg();
+    }
+}
