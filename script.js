@@ -269,32 +269,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // Отрисовка диаграммы при загрузке
     renderChart();
 });
-/* ===== КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ ===== */
-.theme-toggle {
-    background: none;
-    border: none;
-    font-size: 1.4rem;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    color: #444;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
+// ===== ТЕМНАЯ ТЕМА =====
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+// Проверяем сохранённую тему
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+    body.classList.add('dark-theme');
+    body.classList.add('theme-transition');
+    if (themeToggle) {
+        themeToggle.textContent = '☀️';
+    }
 }
 
-.theme-toggle:hover {
-    background: rgba(255, 107, 138, 0.12);
-    transform: rotate(20deg) scale(1.1);
-}
-
-body.dark-theme .theme-toggle {
-    color: #f0f0f0;
-}
-
-.theme-transition {
-    transition: background 0.4s ease, color 0.3s ease;
+// Переключение по клику
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        body.classList.add('theme-transition');
+        
+        if (body.classList.contains('dark-theme')) {
+            localStorage.setItem('theme', 'dark');
+            themeToggle.textContent = '☀️';
+        } else {
+            localStorage.setItem('theme', 'light');
+            themeToggle.textContent = '🌙';
+        }
+    });
 }
