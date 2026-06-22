@@ -297,20 +297,16 @@ if (themeToggle) {
     });
 }
 // ================================================================
-// ===== ПАСХАЛКА — БРЕЙНРОТ МЕМ 67 (ИСПРАВЛЕННАЯ) =====
+// ===== ПАСХАЛКА — БРЕЙНРОТ МЕМ 67 =====
 // ================================================================
 
 function showBrainrotMeme() {
-    // Проверяем, не открыта ли уже
     if (document.querySelector('.easter-egg-overlay')) {
         return;
     }
 
-    console.log('🎉 Показываем пасхалку!');
-
-    // Создаём оверлей
     const overlay = document.createElement('div');
-    overlay.className = 'easter-egg-overlay active'; // Сразу добавляем класс active
+    overlay.className = 'easter-egg-overlay active';
     overlay.id = 'easterEggOverlay';
     overlay.innerHTML = `
         <button class="easter-egg-close" id="easterEggClose">✕</button>
@@ -338,8 +334,8 @@ function showBrainrotMeme() {
     `;
 
     document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
 
-    // Закрытие по клику на крестик
     const closeBtn = document.getElementById('easterEggClose');
     if (closeBtn) {
         closeBtn.addEventListener('click', function(e) {
@@ -348,18 +344,13 @@ function showBrainrotMeme() {
         });
     }
 
-    // Закрытие по клику на оверлей (не на контент)
     overlay.addEventListener('click', function(e) {
         if (e.target === overlay) {
             closeEasterEgg();
         }
     });
 
-    // Закрытие по Escape
     document.addEventListener('keydown', handleEscape);
-    
-    // Блокировка скролла
-    document.body.style.overflow = 'hidden';
 }
 
 function closeEasterEgg() {
@@ -369,7 +360,6 @@ function closeEasterEgg() {
     }
     document.removeEventListener('keydown', handleEscape);
     document.body.style.overflow = '';
-    console.log('❌ Пасхалка закрыта');
 }
 
 function handleEscape(e) {
@@ -380,32 +370,22 @@ function handleEscape(e) {
 
 function initEasterEgg() {
     const title = document.getElementById('easterEggTitle');
-    
-    if (!title) {
-        console.warn('⚠️ Заголовок #easterEggTitle не найден');
-        return;
-    }
+    if (!title) return;
     
     let clickCount = 0;
     let clickTimer = null;
 
     title.addEventListener('click', function() {
         clickCount++;
-        console.log('👆 Клик по заголовку! Счётчик:', clickCount);
-        
         clearTimeout(clickTimer);
         
         if (clickCount >= 3) {
-            console.log('🎉 Запускаем пасхалку!');
             showBrainrotMeme();
             clickCount = 0;
         } else {
             clickTimer = setTimeout(function() {
                 clickCount = 0;
-                console.log('🔄 Сброс счётчика');
             }, 1000);
         }
     });
-    
-    console.log('✅ Пасхалка инициализирована! Кликни 3 раза по заголовку.');
 }
