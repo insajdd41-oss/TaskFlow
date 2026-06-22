@@ -235,6 +235,9 @@ function renderChart() {
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
+     // ===== ПАСХАЛКА (кнопка 67) =====
+    initEasterEggButton();
+    
     
     // Кнопка добавления
     const addBtn = document.getElementById('addTaskBtn');
@@ -300,14 +303,10 @@ if (themeToggle) {
 // ===== ПАСХАЛКА — КНОПКА 67 =====
 // ================================================================
 
-// Функция показа пасхалки с 67
 function showMeme67() {
-    // Проверяем, не открыта ли уже
     if (document.querySelector('.easter-egg-overlay')) {
         return;
     }
-
-    console.log('🎉 Показываем пасхалку 67!');
 
     const overlay = document.createElement('div');
     overlay.className = 'easter-egg-overlay active';
@@ -339,57 +338,46 @@ function showMeme67() {
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
 
-    // Закрытие по клику на крестик
     const closeBtn = document.getElementById('easterEggClose');
     if (closeBtn) {
         closeBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            closeEasterEgg67();
+            closeMeme67();
         });
     }
 
-    // Закрытие по клику на оверлей
     overlay.addEventListener('click', function(e) {
         if (e.target === overlay) {
-            closeEasterEgg67();
+            closeMeme67();
         }
     });
 
-    // Закрытие по Escape
     document.addEventListener('keydown', handleEscape67);
 }
 
-function closeEasterEgg67() {
+function closeMeme67() {
     const overlay = document.querySelector('.easter-egg-overlay');
     if (overlay) {
         overlay.remove();
     }
     document.removeEventListener('keydown', handleEscape67);
     document.body.style.overflow = '';
-    console.log('❌ Пасхалка закрыта');
 }
 
 function handleEscape67(e) {
     if (e.key === 'Escape') {
-        closeEasterEgg67();
+        closeMeme67();
     }
 }
 
-// Инициализация кнопки 67
 function initEasterEggButton() {
     const btn = document.getElementById('easterEggBtn');
-    
-    if (!btn) {
-        console.warn('⚠️ Кнопка #easterEggBtn не найдена');
-        return;
-    }
+    if (!btn) return;
     
     btn.addEventListener('click', function() {
-        console.log('🔮 Нажата кнопка 67!');
         showMeme67();
     });
     
-    // Эффект при наведении
     btn.addEventListener('mouseenter', function() {
         this.style.transform = 'scale(1.1) rotate(-3deg)';
         this.style.boxShadow = '0 8px 30px rgba(255, 107, 138, 0.5)';
@@ -399,6 +387,9 @@ function initEasterEggButton() {
         this.style.transform = 'scale(1) rotate(0deg)';
         this.style.boxShadow = '0 5px 20px rgba(255, 107, 138, 0.3)';
     });
-    
-    console.log('✅ Кнопка 67 инициализирована!');
 }
+
+// Вызов в DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    initEasterEggButton();
+});
