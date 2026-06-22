@@ -269,3 +269,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // Отрисовка диаграммы при загрузке
     renderChart();
 });
+// ===== ТЕМНАЯ ТЕМА =====
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+// Проверяем сохранённую тему
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+    body.classList.add('dark-theme');
+    body.classList.add('theme-transition');
+    if (themeToggle) {
+        themeToggle.textContent = '☀️';
+    }
+}
+
+// Переключение по клику
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        body.classList.add('theme-transition');
+        
+        if (body.classList.contains('dark-theme')) {
+            localStorage.setItem('theme', 'dark');
+            themeToggle.textContent = '☀️';
+        } else {
+            localStorage.setItem('theme', 'light');
+            themeToggle.textContent = '🌙';
+        }
+    });
+}
