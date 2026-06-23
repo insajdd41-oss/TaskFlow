@@ -1,275 +1,379 @@
 // ================================================================
-// ===== СИСТЕМА ДОСТИЖЕНИЙ =====
+// ===== ДАННЫЕ =====
+// ================================================================
+
+let tasks = [];
+let currentFilter = 'all';
+let unlockedAchievements = [];
+let activeTimers = {};
+
+// ================================================================
+// ===== ДОСТИЖЕНИЯ =====
 // ================================================================
 
 const ACHIEVEMENTS = [
-    {
-        id: 'first_task',
-        name: '🌟 Первый шаг',
-        description: 'Выполнить первую задачу',
-        icon: '🌟',
-        check: (stats) => stats.totalCompleted >= 1
-    },
-    {
-        id: 'task_master_5',
-        name: '📋 Мастер задач',
-        description: 'Выполнить 5 задач',
-        icon: '📋',
-        check: (stats) => stats.totalCompleted >= 5
-    },
-    {
-        id: 'task_master_10',
-        name: '🏆 Продуктивный',
-        description: 'Выполнить 10 задач',
-        icon: '🏆',
-        check: (stats) => stats.totalCompleted >= 10
-    },
-    {
-        id: 'task_master_25',
-        name: '👑 Король продуктивности',
-        description: 'Выполнить 25 задач',
-        icon: '👑',
-        check: (stats) => stats.totalCompleted >= 25
-    },
-    {
-        id: 'task_master_50',
-        name: '🚀 Легенда',
-        description: 'Выполнить 50 задач',
-        icon: '🚀',
-        check: (stats) => stats.totalCompleted >= 50
-    },
-    {
-        id: 'perfect_day',
-        name: '☀️ Идеальный день',
-        description: 'Выполнить все задачи за день (минимум 3)',
-        icon: '☀️',
-        check: (stats) => stats.completedToday >= 3 && stats.activeTasks === 0
-    },
-    {
-        id: 'streak_3',
-        name: '🔥 Серия 3 дня',
-        description: 'Выполнять хотя бы 1 задачу 3 дня подряд',
-        icon: '🔥',
-        check: (stats) => stats.streak >= 3
-    },
-    {
-        id: 'streak_7',
-        name: '⚡ Недельная серия',
-        description: 'Выполнять хотя бы 1 задачу 7 дней подряд',
-        icon: '⚡',
-        check: (stats) => stats.streak >= 7
-    },
-    {
-        id: 'streak_30',
-        name: '💎 Месяц продуктивности',
-        description: 'Выполнять хотя бы 1 задачу 30 дней подряд',
-        icon: '💎',
-        check: (stats) => stats.streak >= 30
-    },
-    {
-        id: 'speed_demon',
-        name: '⚡ Демон скорости',
-        description: 'Выполнить 3 задачи за один день',
-        icon: '⚡',
-        check: (stats) => stats.completedToday >= 3
-    },
-    {
-        id: 'week_warrior',
-        name: '📅 Недельный воин',
-        description: 'Выполнить 15 задач за неделю',
-        icon: '📅',
-        check: (stats) => stats.weeklyCompleted >= 15
-    },
-    {
-        id: 'all_clear',
-        name: '🧹 Чистота',
-        description: 'Очистить все выполненные задачи',
-        icon: '🧹',
-        check: (stats) => stats.clearedAll === true
-    }
+    { id: 'first_task', name: 'Первый шаг', desc: 'Выполнить 1 задачу', icon: '🌟', check: s => s.total >= 1 },
+    { id: 'task_5', name: 'Мастер задач', desc: 'Выполнить 5 задач', icon: '📋', check: s => s.total >= 5 },
+    { id: 'task_10', name: 'Продуктивный', desc: 'Выполнить 10 задач', icon: '🏆', check: s => s.total >= 10 },
+    { id: 'task_25', name: 'Король', desc: 'Выполнить 25 задач', icon: '👑', check: s => s.total >= 25 },
+    { id: 'task_50', name: 'Легенда', desc: 'Выполнить 50 задач', icon: '🚀', check: s => s.total >= 50 },
+    { id: 'speed_3', name: 'Демон скорости', desc: 'Выполнить 3 задачи за день', icon: '⚡', check: s => s.today >= 3 },
+    { id: 'week_15', name: 'Недельный воин', desc: 'Выполнить 15 задач за неделю', icon: '📅', check: s => s.week >= 15 },
+    { id: 'streak_3', name: 'Серия 3 дня', desc: '3 дня подряд', icon: '🔥', check: s => s.streak >= 3 },
+    { id: 'streak_7', name: 'Недельная серия', desc: '7 дней подряд', icon: '⚡', check: s => s.streak >= 7 },
+    { id: 'streak_30', name: 'Месяц', desc: '30 дней подряд', icon: '💎', check: s => s.streak >= 30 },
+    { id: 'perfect_day', name: 'Идеальный день', desc: 'Все задачи за день (≥3)', icon: '☀️', check: s => s.today >= 3 && s.active === 0 },
+    { id: 'all_clear', name: 'Чистота', desc: 'Очистить все выполненные', icon: '🧹', check: s => s.cleared === true },
+    { id: 'fast_task', name: 'Скоростной', desc: 'Задача быстрее 1 минуты', icon: '🏃', check: s => s.fastest !== null && s.fastest < 60 },
+    { id: 'long_task', name: 'Марафонец', desc: 'Задача дольше 1 часа', icon: '🏃‍♂️', check: s => s.longest !== null && s.longest > 3600 }
 ];
 
-let unlockedAchievements = [];
-let achievementStreak = 0;
-let lastCompletionDate = null;
-let dailyCompleted = 0;
-let weeklyCompleted = 0;
-let clearedAllFlag = false;
+let streak = 0;
+let lastDate = null;
+let clearedAll = false;
 
-// Загрузка достижений из localStorage
-function loadAchievements() {
-    const saved = localStorage.getItem('achievements');
-    if (saved) {
-        const data = JSON.parse(saved);
+// ================================================================
+// ===== ЗАГРУЗКА / СОХРАНЕНИЕ =====
+// ================================================================
+
+function loadData() {
+    const saved = localStorage.getItem('tasks');
+    if (saved) tasks = JSON.parse(saved);
+    
+    const ach = localStorage.getItem('achievements');
+    if (ach) {
+        const data = JSON.parse(ach);
         unlockedAchievements = data.unlocked || [];
-        achievementStreak = data.streak || 0;
-        lastCompletionDate = data.lastDate ? new Date(data.lastDate) : null;
-        dailyCompleted = data.dailyCompleted || 0;
-        weeklyCompleted = data.weeklyCompleted || 0;
-        clearedAllFlag = data.clearedAll || false;
+        streak = data.streak || 0;
+        lastDate = data.lastDate ? new Date(data.lastDate) : null;
+        clearedAll = data.clearedAll || false;
     }
-    renderAchievements();
+    
+    renderAll();
 }
 
-// Сохранение достижений в localStorage
-function saveAchievements() {
+function saveData() {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
     localStorage.setItem('achievements', JSON.stringify({
         unlocked: unlockedAchievements,
-        streak: achievementStreak,
-        lastDate: lastCompletionDate ? lastCompletionDate.toISOString() : null,
-        dailyCompleted: dailyCompleted,
-        weeklyCompleted: weeklyCompleted,
-        clearedAll: clearedAllFlag
+        streak: streak,
+        lastDate: lastDate ? lastDate.toISOString() : null,
+        clearedAll: clearedAll
     }));
 }
 
-// Получение статистики для проверки достижений
-function getAchievementStats() {
-    const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(t => t.completed);
-    const totalCompleted = completedTasks.length;
-    const activeTasks = totalTasks - totalCompleted;
+// ================================================================
+// ===== ОТРИСОВКА =====
+// ================================================================
+
+function renderAll() {
+    renderTasks();
+    updateStats();
+    renderChart();
+    renderAchievements();
+}
+
+function formatTime(sec) {
+    if (sec === null || sec === undefined) return '—';
+    if (sec < 60) return Math.floor(sec) + 'с';
+    if (sec < 3600) return Math.floor(sec/60) + 'м ' + Math.floor(sec%60) + 'с';
+    return Math.floor(sec/3600) + 'ч ' + Math.floor((sec%3600)/60) + 'м';
+}
+
+function formatHours(sec) {
+    if (!sec) return '0';
+    return (sec / 3600).toFixed(1);
+}
+
+function renderTasks() {
+    const list = document.getElementById('taskList');
+    if (!list) return;
     
-    // Сегодняшние выполненные
+    let filtered = tasks;
+    if (currentFilter === 'active') filtered = tasks.filter(t => !t.completed);
+    else if (currentFilter === 'completed') filtered = tasks.filter(t => t.completed);
+    
+    if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty-state">✨ Нет задач</div>';
+        return;
+    }
+    
+    list.innerHTML = filtered.map(task => {
+        let timerHtml = '';
+        if (!task.completed) {
+            const elapsed = task.timerStarted ? Math.floor((Date.now() - new Date(task.timerStarted).getTime()) / 1000) : 0;
+            timerHtml = `<span class="task-timer" id="timer-${task.id}">⏱️ ${formatTime(elapsed)}</span>`;
+        } else if (task.timeSpent !== null && task.timeSpent !== undefined) {
+            timerHtml = `<span class="task-timer completed-timer">✅ ${formatTime(task.timeSpent)}</span>`;
+        }
+        
+        return `
+            <li class="task-item ${task.completed ? 'completed' : ''}" data-id="${task.id}">
+                <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''}>
+                <span class="task-text">${escapeHtml(task.text)}</span>
+                ${timerHtml}
+                <button class="task-delete">🗑️</button>
+            </li>
+        `;
+    }).join('');
+    
+    attachEvents();
+    startTimers();
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function attachEvents() {
+    document.querySelectorAll('.task-item').forEach(item => {
+        const id = parseInt(item.dataset.id);
+        const checkbox = item.querySelector('.task-checkbox');
+        const deleteBtn = item.querySelector('.task-delete');
+        const textSpan = item.querySelector('.task-text');
+        
+        checkbox.addEventListener('change', () => {
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+            
+            task.completed = checkbox.checked;
+            if (task.completed) {
+                if (task.timerStarted) {
+                    task.timeSpent = Math.floor((Date.now() - new Date(task.timerStarted).getTime()) / 1000);
+                } else if (task.createdAt) {
+                    task.timeSpent = Math.floor((Date.now() - new Date(task.createdAt).getTime()) / 1000);
+                } else {
+                    task.timeSpent = 0;
+                }
+                task.completedAt = new Date().toISOString();
+                task.timerStarted = null;
+                if (activeTimers[id]) {
+                    clearInterval(activeTimers[id]);
+                    delete activeTimers[id];
+                }
+                checkStreak();
+                checkAchievements();
+            } else {
+                task.timerStarted = new Date().toISOString();
+                task.completedAt = null;
+                task.timeSpent = null;
+            }
+            saveData();
+            renderAll();
+        });
+        
+        deleteBtn.addEventListener('click', () => {
+            if (activeTimers[id]) {
+                clearInterval(activeTimers[id]);
+                delete activeTimers[id];
+            }
+            tasks = tasks.filter(t => t.id !== id);
+            saveData();
+            renderAll();
+        });
+        
+        textSpan.addEventListener('dblclick', () => {
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+            const newText = prompt('Редактировать задачу:', task.text);
+            if (newText !== null && newText.trim() !== '') {
+                task.text = newText.trim();
+                saveData();
+                renderAll();
+            }
+        });
+    });
+}
+
+function startTimers() {
+    Object.values(activeTimers).forEach(clearInterval);
+    activeTimers = {};
+    
+    tasks.forEach(task => {
+        if (!task.completed && task.timerStarted) {
+            const interval = setInterval(() => {
+                const el = document.getElementById(`timer-${task.id}`);
+                if (el) {
+                    const elapsed = Math.floor((Date.now() - new Date(task.timerStarted).getTime()) / 1000);
+                    el.textContent = `⏱️ ${formatTime(elapsed)}`;
+                }
+            }, 1000);
+            activeTimers[task.id] = interval;
+        }
+    });
+}
+
+// ================================================================
+// ===== СТАТИСТИКА =====
+// ================================================================
+
+function updateStats() {
+    const total = tasks.length;
+    const completed = tasks.filter(t => t.completed).length;
+    const active = total - completed;
+    const prod = total === 0 ? 0 : Math.round((completed / total) * 100);
+    
+    let totalTime = 0, count = 0;
+    tasks.forEach(t => {
+        if (t.completed && t.timeSpent) { totalTime += t.timeSpent; count++; }
+    });
+    const avg = count > 0 ? totalTime / count : 0;
+    
+    document.getElementById('completedCount').textContent = completed;
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('totalTimeStat').textContent = formatHours(totalTime);
+    document.getElementById('activeStat').textContent = active;
+    document.getElementById('todayStat').textContent = completed;
+    document.getElementById('productivityStat').textContent = prod;
+    document.getElementById('totalTimeStat2').textContent = formatHours(totalTime);
+    document.getElementById('avgTimeStat').textContent = Math.round(avg / 60);
+}
+
+// ================================================================
+// ===== ДИАГРАММА =====
+// ================================================================
+
+function renderChart() {
+    const bars = document.getElementById('chartBars');
+    const labels = document.getElementById('chartLabels');
+    if (!bars || !labels) return;
+    
+    const days = ['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
+    const stats = [0,0,0,0,0,0,0];
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const completedToday = completedTasks.filter(t => {
+    const todayDay = today.getDay();
+    
+    tasks.filter(t => t.completed && t.completedAt).forEach(t => {
+        const d = new Date(t.completedAt);
+        const diff = Math.floor((today - d) / (1000*60*60*24));
+        if (diff < 7 && diff >= 0) {
+            let idx = d.getDay() - 1;
+            if (idx < 0) idx = 6;
+            stats[idx]++;
+        }
+    });
+    
+    const todayIdx = todayDay === 0 ? 6 : todayDay - 1;
+    const shifted = [], shiftedLabels = [];
+    for (let i = 0; i < 7; i++) {
+        const idx = (todayIdx - 6 + i + 7) % 7;
+        shifted.push(stats[idx]);
+        shiftedLabels.push(i === 6 ? days[idx] + ' 🎯' : days[idx]);
+    }
+    
+    const max = Math.max(...shifted, 1);
+    bars.innerHTML = shifted.map((v, i) => {
+        const h = (v / max) * 100;
+        const cls = i === 6 ? 'chart-bar' : 'chart-bar green-bar';
+        return `
+            <div class="chart-bar-wrapper">
+                <span class="chart-bar-value">${v}</span>
+                <div class="${cls}" style="height: ${Math.max(h, 5)}%;"></div>
+            </div>
+        `;
+    }).join('');
+    
+    labels.innerHTML = shiftedLabels.map((l, i) => 
+        `<span class="chart-label ${i === 6 ? 'today' : ''}">${l}</span>`
+    ).join('');
+}
+
+// ================================================================
+// ===== ДОСТИЖЕНИЯ =====
+// ================================================================
+
+function getStats() {
+    const completed = tasks.filter(t => t.completed);
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    
+    const todayDone = completed.filter(t => {
         if (!t.completedAt) return false;
         const d = new Date(t.completedAt);
-        d.setHours(0, 0, 0, 0);
+        d.setHours(0,0,0,0);
         return d.getTime() === today.getTime();
     }).length;
     
-    // Недельные выполненные
     const weekAgo = new Date(today);
     weekAgo.setDate(weekAgo.getDate() - 7);
-    const weeklyCompletedNow = completedTasks.filter(t => {
+    const weekDone = completed.filter(t => {
         if (!t.completedAt) return false;
-        const d = new Date(t.completedAt);
-        return d >= weekAgo;
+        return new Date(t.completedAt) >= weekAgo;
     }).length;
     
+    let fastest = null, longest = null;
+    completed.forEach(t => {
+        if (t.timeSpent) {
+            if (fastest === null || t.timeSpent < fastest) fastest = t.timeSpent;
+            if (longest === null || t.timeSpent > longest) longest = t.timeSpent;
+        }
+    });
+    
     return {
-        totalCompleted,
-        activeTasks,
-        completedToday,
-        weeklyCompleted: weeklyCompletedNow,
-        streak: achievementStreak,
-        clearedAll: clearedAllFlag
+        total: completed.length,
+        active: tasks.length - completed.length,
+        today: todayDone,
+        week: weekDone,
+        streak: streak,
+        cleared: clearedAll,
+        fastest: fastest,
+        longest: longest
     };
 }
 
-// Проверка и разблокировка достижений
 function checkAchievements() {
-    const stats = getAchievementStats();
-    let newAchievements = [];
-    
-    // Обновляем daily и weekly счётчики
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    // Сброс daily если новый день
-    if (lastCompletionDate) {
-        const lastDate = new Date(lastCompletionDate);
-        lastDate.setHours(0, 0, 0, 0);
-        if (lastDate.getTime() < today.getTime()) {
-            // Новый день
-            if (dailyCompleted > 0) {
-                // Если вчера были выполнены задачи — продлеваем серию
-                if (dailyCompleted > 0) {
-                    achievementStreak++;
-                } else {
-                    achievementStreak = 0;
-                }
-            }
-            dailyCompleted = 0;
-        }
-    }
-    
-    // Сброс weekly если новая неделя
-    const weekStart = new Date(today);
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
-    if (lastCompletionDate) {
-        const lastDate = new Date(lastCompletionDate);
-        if (lastDate < weekStart) {
-            weeklyCompleted = 0;
-        }
-    }
-    
-    // Проверяем все достижения
+    const s = getStats();
+    let newOnes = [];
     ACHIEVEMENTS.forEach(ach => {
-        if (!unlockedAchievements.includes(ach.id) && ach.check(stats)) {
+        if (!unlockedAchievements.includes(ach.id) && ach.check(s)) {
             unlockedAchievements.push(ach.id);
-            newAchievements.push(ach);
+            newOnes.push(ach);
         }
     });
-    
-    // Обновляем прогресс
-    if (newAchievements.length > 0) {
-        saveAchievements();
+    if (newOnes.length > 0) {
+        saveData();
         renderAchievements();
-        
-        // Показываем уведомление о новых достижениях
-        newAchievements.forEach(ach => {
-            showAchievementNotification(ach);
-        });
+        newOnes.forEach(showNotification);
     }
 }
 
-// Показ уведомления о достижении
-function showAchievementNotification(achievement) {
-    const notification = document.createElement('div');
-    notification.className = 'achievement-notification';
-    notification.innerHTML = `
-        <div class="achievement-notif-icon">${achievement.icon}</div>
-        <div class="achievement-notif-content">
-            <div class="achievement-notif-title">🏅 Новое достижение!</div>
-            <div class="achievement-notif-name">${achievement.name}</div>
-            <div class="achievement-notif-desc">${achievement.description}</div>
-        </div>
-    `;
-    document.body.appendChild(notification);
+function checkStreak() {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const completed = tasks.filter(t => t.completed && t.completedAt);
+    if (completed.length === 0) return;
     
-    // Анимация появления
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 100);
-    
-    // Автоматическое скрытие через 5 секунд
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            notification.remove();
-        }, 500);
-    }, 5000);
-    
-    // Закрытие по клику
-    notification.addEventListener('click', () => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            notification.remove();
-        }, 500);
+    const todayDone = completed.filter(t => {
+        const d = new Date(t.completedAt);
+        d.setHours(0,0,0,0);
+        return d.getTime() === today.getTime();
     });
+    
+    if (todayDone.length > 0) {
+        if (!lastDate) {
+            streak = 1;
+        } else {
+            const diff = Math.floor((today - lastDate) / (1000*60*60*24));
+            if (diff === 0) return;
+            if (diff === 1) streak++;
+            else streak = 1;
+        }
+        lastDate = new Date(today);
+        saveData();
+    }
 }
 
-// Отрисовка достижений
 function renderAchievements() {
     const grid = document.getElementById('achievementsGrid');
-    const totalSpan = document.getElementById('achievementTotal');
-    const maxSpan = document.getElementById('achievementMax');
-    const progressFill = document.getElementById('achievementProgress');
-    
     if (!grid) return;
     
     const total = ACHIEVEMENTS.length;
     const unlocked = unlockedAchievements.length;
-    
-    if (totalSpan) totalSpan.textContent = unlocked;
-    if (maxSpan) maxSpan.textContent = total;
-    if (progressFill) {
-        const pct = total === 0 ? 0 : Math.round((unlocked / total) * 100);
-        progressFill.style.width = pct + '%';
-    }
+    document.getElementById('achievementTotal').textContent = unlocked;
+    document.getElementById('achievementMax').textContent = total;
+    document.getElementById('achievementProgress').style.width = total === 0 ? '0%' : (unlocked / total * 100) + '%';
     
     grid.innerHTML = ACHIEVEMENTS.map(ach => {
         const isUnlocked = unlockedAchievements.includes(ach.id);
@@ -277,293 +381,82 @@ function renderAchievements() {
             <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
                 <div class="achievement-icon">${ach.icon}</div>
                 <div class="achievement-name">${ach.name}</div>
-                <div class="achievement-desc">${ach.description}</div>
+                <div class="achievement-desc">${ach.desc}</div>
                 <div class="achievement-status">${isUnlocked ? '✅ Разблокировано' : '🔒 Заблокировано'}</div>
             </div>
         `;
     }).join('');
 }
 
-// Обновление прогресса достижений при выполнении задачи
-function updateAchievementProgress() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    // Обновляем daily счётчик
-    const completedToday = tasks.filter(t => {
-        if (!t.completed || !t.completedAt) return false;
-        const d = new Date(t.completedAt);
-        d.setHours(0, 0, 0, 0);
-        return d.getTime() === today.getTime();
-    }).length;
-    dailyCompleted = completedToday;
-    
-    // Обновляем weekly счётчик
-    const weekAgo = new Date(today);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    weeklyCompleted = tasks.filter(t => {
-        if (!t.completed || !t.completedAt) return false;
-        const d = new Date(t.completedAt);
-        return d >= weekAgo;
-    }).length;
-    
-    // Обновляем последнюю дату выполнения
-    const completedTasks = tasks.filter(t => t.completed && t.completedAt);
-    if (completedTasks.length > 0) {
-        const latest = completedTasks.reduce((max, t) => {
-            const d = new Date(t.completedAt);
-            return d > max ? d : max;
-        }, new Date(0));
-        
-        const latestDate = new Date(latest);
-        latestDate.setHours(0, 0, 0, 0);
-        
-        if (!lastCompletionDate || latestDate.getTime() > new Date(lastCompletionDate).getTime()) {
-            lastCompletionDate = latestDate;
-        }
-    }
-    
-    saveAchievements();
-    checkAchievements();
-}
-
-// Очистка выполненных (для достижения "Чистота")
-function clearCompletedWithAchievement() {
-    const hasCompleted = tasks.some(t => t.completed);
-    if (!hasCompleted) {
-        alert('Нет выполненных задач для очистки!');
-        return;
-    }
-    
-    tasks = tasks.filter(t => !t.completed);
-    clearedAllFlag = true;
-    saveTasks();
-    renderTasks();
-    saveAchievements();
-    checkAchievements();
-}
-
-// ================================================================
-// ===== УПРАВЛЕНИЕ ЗАДАЧАМИ =====
-// ================================================================
-
-let tasks = [];
-let currentFilter = 'all';
-
-// Загрузка из localStorage
-function loadTasks() {
-    const saved = localStorage.getItem('tasks');
-    if (saved) {
-        tasks = JSON.parse(saved);
-    }
-    loadAchievements();
-    renderTasks();
-}
-
-// Сохранение в localStorage
-function saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    updateStats();
-    renderChart();
-    updateAchievementProgress();
-}
-
-// Рендер задач
-function renderTasks() {
-    const taskList = document.getElementById('taskList');
-    if (!taskList) return;
-    
-    let filteredTasks = tasks;
-    if (currentFilter === 'active') {
-        filteredTasks = tasks.filter(t => !t.completed);
-    } else if (currentFilter === 'completed') {
-        filteredTasks = tasks.filter(t => t.completed);
-    }
-    
-    if (filteredTasks.length === 0) {
-        taskList.innerHTML = '<div class="empty-state">✨ Нет задач. Добавьте новую!</div>';
-        return;
-    }
-    
-    taskList.innerHTML = filteredTasks.map((task) => {
-        return `
-            <li class="task-item ${task.completed ? 'completed' : ''}" data-id="${task.id}">
-                <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''}>
-                <span class="task-text">${escapeHtml(task.text)}</span>
-                <button class="task-delete">🗑️</button>
-            </li>
-        `;
-    }).join('');
-    
-    attachTaskEvents();
-    updateStats();
-    renderChart();
-}
-
-// Экранирование HTML
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// Прикрепление событий к задачам
-function attachTaskEvents() {
-    document.querySelectorAll('.task-item').forEach(item => {
-        const id = parseInt(item.dataset.id);
-        const checkbox = item.querySelector('.task-checkbox');
-        const deleteBtn = item.querySelector('.task-delete');
-        const textSpan = item.querySelector('.task-text');
-        
-        // Чекбокс
-        checkbox.addEventListener('change', () => {
-            const task = tasks.find(t => t.id === id);
-            if (task) {
-                task.completed = checkbox.checked;
-                if (task.completed) {
-                    task.completedAt = new Date().toISOString();
-                } else {
-                    task.completedAt = null;
-                }
-                saveTasks();
-                renderTasks();
-                // Проверяем достижения после выполнения задачи
-                updateAchievementProgress();
-            }
-        });
-        
-        // Удаление
-        deleteBtn.addEventListener('click', () => {
-            tasks = tasks.filter(t => t.id !== id);
-            saveTasks();
-            renderTasks();
-        });
-        
-        // Редактирование по двойному клику
-        textSpan.addEventListener('dblclick', () => {
-            const task = tasks.find(t => t.id === id);
-            if (task) {
-                const newText = prompt('Редактировать задачу:', task.text);
-                if (newText !== null && newText.trim() !== '') {
-                    task.text = newText.trim();
-                    saveTasks();
-                    renderTasks();
-                }
-            }
-        });
+function showNotification(ach) {
+    const notif = document.createElement('div');
+    notif.className = 'achievement-notification';
+    notif.innerHTML = `
+        <div class="achievement-notif-icon">${ach.icon}</div>
+        <div class="achievement-notif-content">
+            <div class="achievement-notif-title">🏅 Новое достижение!</div>
+            <div class="achievement-notif-name">${ach.name}</div>
+            <div class="achievement-notif-desc">${ach.desc}</div>
+        </div>
+    `;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.classList.add('show'), 100);
+    setTimeout(() => {
+        notif.classList.remove('show');
+        setTimeout(() => notif.remove(), 500);
+    }, 5000);
+    notif.addEventListener('click', () => {
+        notif.classList.remove('show');
+        setTimeout(() => notif.remove(), 500);
     });
 }
 
-// Обновление статистики
-function updateStats() {
-    const total = tasks.length;
-    const completed = tasks.filter(t => t.completed).length;
-    const active = total - completed;
-    const productivity = total === 0 ? 0 : Math.round((completed / total) * 100);
-    
-    const completedSpan = document.getElementById('completedCount');
-    const totalSpan = document.getElementById('totalCount');
-    const activeStat = document.getElementById('activeStat');
-    const todayStat = document.getElementById('todayStat');
-    const productivityStat = document.getElementById('productivityStat');
-    
-    if (completedSpan) completedSpan.textContent = completed;
-    if (totalSpan) totalSpan.textContent = total;
-    if (activeStat) activeStat.textContent = active;
-    if (todayStat) todayStat.textContent = completed;
-    if (productivityStat) productivityStat.textContent = productivity;
-}
+// ================================================================
+// ===== ДЕЙСТВИЯ С ЗАДАЧАМИ =====
+// ================================================================
 
-// Добавление задачи
 function addTask() {
     const input = document.getElementById('taskInput');
     const text = input.value.trim();
-    
-    if (text === '') {
-        alert('Введите текст задачи!');
-        return;
-    }
+    if (!text) { alert('Введите текст!'); return; }
     
     tasks.unshift({
         id: Date.now(),
         text: text,
         completed: false,
         createdAt: new Date().toISOString(),
-        completedAt: null
+        completedAt: null,
+        timeSpent: null,
+        timerStarted: new Date().toISOString()
     });
-    
     input.value = '';
-    saveTasks();
-    renderTasks();
+    saveData();
+    renderAll();
 }
 
-// Очистка выполненных (старая версия, заменена на новую)
 function clearCompleted() {
-    clearCompletedWithAchievement();
+    const has = tasks.some(t => t.completed);
+    if (!has) { alert('Нет выполненных задач!'); return; }
+    tasks = tasks.filter(t => !t.completed);
+    clearedAll = true;
+    saveData();
+    renderAll();
+    checkAchievements();
 }
 
-// ===== ДИАГРАММА ПРОДУКТИВНОСТИ =====
+// ================================================================
+// ===== ТЕМНАЯ ТЕМА =====
+// ================================================================
 
-function getWeeklyStats() {
-    const days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
-    const stats = [0, 0, 0, 0, 0, 0, 0];
-    
-    const completedTasks = tasks.filter(t => t.completed);
-    const today = new Date();
-    const todayDay = today.getDay();
-    
-    completedTasks.forEach(task => {
-        if (task.completedAt) {
-            const taskDate = new Date(task.completedAt);
-            const diffDays = Math.floor((today - taskDate) / (1000 * 60 * 60 * 24));
-            if (diffDays < 7 && diffDays >= 0) {
-                let dayIndex = taskDate.getDay() - 1;
-                if (dayIndex < 0) dayIndex = 6;
-                stats[dayIndex]++;
-            }
-        }
-    });
-    
-    const todayIndex = todayDay === 0 ? 6 : todayDay - 1;
-    const shiftedStats = [];
-    const shiftedLabels = [];
-    
-    for (let i = 0; i < 7; i++) {
-        const idx = (todayIndex - 6 + i + 7) % 7;
-        shiftedStats.push(stats[idx]);
-        const label = days[idx];
-        shiftedLabels.push(i === 6 ? label + ' 🎯' : label);
-    }
-    
-    return { stats: shiftedStats, labels: shiftedLabels };
-}
+document.getElementById('themeToggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    document.getElementById('themeToggle').textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+});
 
-function renderChart() {
-    const chartBars = document.getElementById('chartBars');
-    const chartLabels = document.getElementById('chartLabels');
-    
-    if (!chartBars || !chartLabels) return;
-    
-    const { stats, labels } = getWeeklyStats();
-    const maxVal = Math.max(...stats, 1);
-    
-    chartBars.innerHTML = stats.map((val, index) => {
-        const heightPercent = (val / maxVal) * 100;
-        const isToday = index === 6;
-        const barClass = isToday ? 'chart-bar' : 'chart-bar green-bar';
-        
-        return `
-            <div class="chart-bar-wrapper">
-                <span class="chart-bar-value">${val}</span>
-                <div class="${barClass}" style="height: ${Math.max(heightPercent, 5)}%;"></div>
-            </div>
-        `;
-    }).join('');
-    
-    chartLabels.innerHTML = labels.map((label, index) => {
-        const isToday = index === 6;
-        return `<span class="chart-label ${isToday ? 'today' : ''}">${label}</span>`;
-    }).join('');
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
+    document.getElementById('themeToggle').textContent = '☀️';
 }
 
 // ================================================================
@@ -571,25 +464,11 @@ function renderChart() {
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadTasks();
-    initEasterEggButton();
+    loadData();
     
-    const addBtn = document.getElementById('addTaskBtn');
-    if (addBtn) {
-        addBtn.addEventListener('click', addTask);
-    }
-    
-    const taskInput = document.getElementById('taskInput');
-    if (taskInput) {
-        taskInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addTask();
-        });
-    }
-    
-    const clearBtn = document.getElementById('clearCompletedBtn');
-    if (clearBtn) {
-        clearBtn.addEventListener('click', clearCompleted);
-    }
+    document.getElementById('addTaskBtn').addEventListener('click', addTask);
+    document.getElementById('taskInput').addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
+    document.getElementById('clearCompletedBtn').addEventListener('click', clearCompleted);
     
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -599,129 +478,4 @@ document.addEventListener('DOMContentLoaded', () => {
             renderTasks();
         });
     });
-    
-    renderChart();
-    renderAchievements();
-});
-
-// ===== ТЕМНАЯ ТЕМА =====
-const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
-    body.classList.add('dark-theme');
-    body.classList.add('theme-transition');
-    if (themeToggle) {
-        themeToggle.textContent = '☀️';
-    }
-}
-
-if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-theme');
-        body.classList.add('theme-transition');
-        
-        if (body.classList.contains('dark-theme')) {
-            localStorage.setItem('theme', 'dark');
-            themeToggle.textContent = '☀️';
-        } else {
-            localStorage.setItem('theme', 'light');
-            themeToggle.textContent = '🌙';
-        }
-    });
-}
-
-// ================================================================
-// ===== ПАСХАЛКА — КНОПКА 67 =====
-// ================================================================
-
-function showMeme67() {
-    if (document.querySelector('.easter-egg-overlay')) {
-        return;
-    }
-
-    const overlay = document.createElement('div');
-    overlay.className = 'easter-egg-overlay active';
-    overlay.id = 'easterEggOverlay';
-    overlay.innerHTML = `
-        <button class="easter-egg-close" id="easterEggClose">✕</button>
-        <div class="easter-egg-content">
-            <div class="easter-egg-meme" style="font-size: 10rem;">67</div>
-            <div class="easter-egg-text">🔥 67 🔥</div>
-            <div class="easter-egg-subtext">Ты нашёл пасхалку! 🎉</div>
-            <div style="margin-top: 30px; font-size: 4rem; animation: brainrotShake 2s ease-in-out infinite;">
-                🗿 67 Rizz 🗿
-            </div>
-            <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; font-size: 3rem;">
-                <span>6️⃣</span>
-                <span style="animation: brainrotPulse 1.5s ease-in-out infinite;">7️⃣</span>
-                <span>6️⃣</span>
-                <span style="animation: brainrotPulse 2s ease-in-out infinite;">7️⃣</span>
-            </div>
-            <div style="margin-top: 20px; color: #666; font-size: 1.2rem; letter-spacing: 4px;">
-                ═══════ ✦ 67 ✦ ═══════
-            </div>
-            <div style="margin-top: 20px; color: #555; font-size: 0.8rem;">
-                (нажмите ✕ или кликните в любом месте, чтобы закрыть)
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(overlay);
-    document.body.style.overflow = 'hidden';
-
-    const closeBtn = document.getElementById('easterEggClose');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            closeMeme67();
-        });
-    }
-
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) {
-            closeMeme67();
-        }
-    });
-
-    document.addEventListener('keydown', handleEscape67);
-}
-
-function closeMeme67() {
-    const overlay = document.querySelector('.easter-egg-overlay');
-    if (overlay) {
-        overlay.remove();
-    }
-    document.removeEventListener('keydown', handleEscape67);
-    document.body.style.overflow = '';
-}
-
-function handleEscape67(e) {
-    if (e.key === 'Escape') {
-        closeMeme67();
-    }
-}
-
-function initEasterEggButton() {
-    const btn = document.getElementById('easterEggBtn');
-    if (!btn) return;
-    
-    btn.addEventListener('click', function() {
-        showMeme67();
-    });
-    
-    btn.addEventListener('mouseenter', function() {
-        this.style.transform = 'scale(1.1) rotate(-3deg)';
-        this.style.boxShadow = '0 8px 30px rgba(255, 107, 138, 0.5)';
-    });
-    
-    btn.addEventListener('mouseleave', function() {
-        this.style.transform = 'scale(1) rotate(0deg)';
-        this.style.boxShadow = '0 5px 20px rgba(255, 107, 138, 0.3)';
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    initEasterEggButton();
 });
