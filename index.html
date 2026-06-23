@@ -1,46 +1,14 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO -->
-    <title>Планировщик задач | To-Do List</title>
-    <meta name="description" content="Удобный планировщик задач в розово-зелёном стиле. Добавляй, выполняй и отслеживай свои задачи.">
-    <meta name="keywords" content="планировщик, задачи, to-do, список дел, продуктивность">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Планировщик задач">
-    <meta property="og:description" content="Розово-зелёный планировщик для продуктивного дня">
-    <meta property="og:type" content="website">
-    
+    <title>Планировщик задач</title>
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Яндекс Метрика -->
-    <script>
-        (function(m,e,t,r,i,k,a){
-            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-        })
-        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-        
-        ym(98765432, "init", {
-            clickmap: true,
-            trackLinks: true,
-            accurateTrackBounce: true,
-            webvisor: true
-        });
-    </script>
-    <noscript>
-        <div><img src="https://mc.yandex.ru/watch/98765432" style="position:absolute; left:-9999px;" alt="" /></div>
-    </noscript>
 </head>
 <body>
 
-<!-- ===== МЕНЮШКА ===== -->
+<!-- МЕНЮ -->
 <nav class="fixed-menu">
     <div class="menu-logo">🌸 Task<span class="green">Flow</span></div>
     <ul class="menu-links">
@@ -48,131 +16,75 @@
         <li><a href="#tasks">Задачи</a></li>
         <li><a href="#stats">Статистика</a></li>
         <li><a href="#achievements">Достижения</a></li>
-        <li><a href="#about">О проекте</a></li>
     </ul>
-    <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">🌙</button>
+    <button class="theme-toggle" id="themeToggle">🌙</button>
 </nav>
 
 <main class="container">
-    <!-- ===== HERO ===== -->
+
+    <!-- HERO -->
     <section id="home" class="hero-section">
         <h1>🎯 Планировщик задач</h1>
-        <p class="subtitle">Организуй свой день в розово-зелёном стиле</p>
+        <p class="subtitle">Организуй свой день</p>
         <div class="hero-stats">
             <div class="stat-card pink">✅ Выполнено: <span id="completedCount">0</span></div>
             <div class="stat-card green">📋 Всего: <span id="totalCount">0</span></div>
+            <div class="stat-card gradient">⏱️ Время: <span id="totalTimeStat">0</span>ч</div>
         </div>
     </section>
 
-    <!-- ===== ЗАДАЧИ ===== -->
+    <!-- ЗАДАЧИ -->
     <section id="tasks" class="tasks-section">
         <h2>📝 Мои задачи</h2>
-        
         <div class="task-input-group">
-            <input type="text" id="taskInput" placeholder="Что нужно сделать?" autocomplete="off">
+            <input type="text" id="taskInput" placeholder="Что нужно сделать?">
             <button id="addTaskBtn">➕ Добавить</button>
         </div>
-
         <div class="filter-buttons">
             <button class="filter-btn active" data-filter="all">Все</button>
             <button class="filter-btn" data-filter="active">Активные</button>
             <button class="filter-btn" data-filter="completed">Выполненные</button>
         </div>
-
         <ul id="taskList" class="task-list"></ul>
-
         <button id="clearCompletedBtn" class="clear-btn">🗑️ Очистить выполненные</button>
     </section>
 
-    <!-- ===== СТАТА ===== -->
+    <!-- СТАТИСТИКА -->
     <section id="stats" class="stats-section">
         <h2>📊 Статистика</h2>
         <div class="stats-grid">
-            <div class="stat-item pink-bg">Активных задач: <span id="activeStat">0</span></div>
-            <div class="stat-item green-bg">Выполнено сегодня: <span id="todayStat">0</span></div>
+            <div class="stat-item pink-bg">Активных: <span id="activeStat">0</span></div>
+            <div class="stat-item green-bg">Сегодня: <span id="todayStat">0</span></div>
             <div class="stat-item gradient-bg">Продуктивность: <span id="productivityStat">0</span>%</div>
+            <div class="stat-item time-bg">⏱️ Общее время: <span id="totalTimeStat2">0</span>ч</div>
+            <div class="stat-item avg-bg">Среднее время: <span id="avgTimeStat">0</span>м</div>
         </div>
-        
-        <!-- ===== ДИАГРАММА ПРОДУКТИВНОСТИ ===== -->
+        <!-- Диаграмма -->
         <div class="chart-section">
             <h3>📈 Продуктивность за неделю</h3>
             <div class="chart-container">
-                <div class="chart-bars" id="chartBars">
-                    <!-- Сюда JS будет вставлять столбцы -->
-                </div>
-                <div class="chart-labels" id="chartLabels">
-                    <!-- Сюда JS будет вставлять подписи дней -->
-                </div>
+                <div class="chart-bars" id="chartBars"></div>
+                <div class="chart-labels" id="chartLabels"></div>
             </div>
-        </div>
-        
-        <!--  КНОПКА 67  -->
-        <div style="text-align: center; margin: 20px 0;">
-            <button id="easterEggBtn" style="
-                background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
-                color: white;
-                border: none;
-                padding: 15px 40px;
-                border-radius: 50px;
-                font-size: 1.5rem;
-                font-weight: bold;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 5px 20px rgba(255, 107, 138, 0.3);
-            ">🔮 67</button>
-            <p style="color: #999; font-size: 0.8rem; margin-top: 5px;">нажми на 67!</p>
-        </div>
-        
-        <!-- 3D КУБИК с рабочими эмодзиками -->
-        <div class="cube-3d">
-            <div class="cube">
-                <div class="face front">🏆</div>
-                <div class="face back">⭐</div>
-                <div class="face right">🎯</div>
-                <div class="face left">💪</div>
-                <div class="face top">🚀</div>
-                <div class="face bottom">✅</div>
-            </div>
-            <p class="cube-text">3D-достижения</p>
         </div>
     </section>
 
-    <!-- ===== ДОСТИЖЕНИЯ ===== -->
+    <!-- ДОСТИЖЕНИЯ -->
     <section id="achievements" class="achievements-section">
         <h2>🏅 Мои достижения</h2>
-        <div class="achievements-grid" id="achievementsGrid">
-            <!-- Достижения будут вставляться JS -->
-        </div>
+        <div class="achievements-grid" id="achievementsGrid"></div>
         <div class="achievement-progress">
-            <p>Всего достижений: <span id="achievementTotal">0</span> из <span id="achievementMax">0</span></p>
+            <p>Прогресс: <span id="achievementTotal">0</span> / <span id="achievementMax">14</span></p>
             <div class="progress-bar-bg">
                 <div class="progress-bar-fill" id="achievementProgress" style="width: 0%;"></div>
             </div>
         </div>
     </section>
 
-    <!-- ===== СТАТЬЯ (SEO) ===== -->
-    <section id="about" class="about-section">
-        <h2>📖 Как эффективно планировать свой день</h2>
-        <div class="article-content">
-            <p>Планирование задач — это ключевой навык продуктивного человека. Исследования показывают, что люди, ведущие чек-листы, выполняют на 30% больше дел за день.</p>
-            <p>Наш планировщик помогает структурировать задачи, расставлять приоритеты и отслеживать прогресс. Просто добавляйте задачи, отмечайте выполненные и следите за статистикой.</p>
-            <p>Совет: разбивайте большие задачи на маленькие шаги — так их проще выполнять, а чувство прогресса мотивирует двигаться дальше.</p>
-            
-            <!-- Видео для SEO -->
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                        title="Как эффективно планировать день"
-                        frameborder="0"
-                        allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-    </section>
 </main>
 
 <footer class="footer">
-    <p>© 2026 Планировщик задач. Сделано в рамках производственной праткики стеднтами группы веб-51.</p>
+    <p>© 2026 Планировщик задач</p>
 </footer>
 
 <script src="script.js"></script>
