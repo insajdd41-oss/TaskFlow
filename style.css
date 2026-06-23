@@ -1,4 +1,4 @@
-/* ===== БАЗОВЫЕ СТИЛИ ===== */
+/* ===== БАЗА ===== */
 * {
     margin: 0;
     padding: 0;
@@ -6,10 +6,11 @@
 }
 
 body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     background: linear-gradient(135deg, #FFE0EC 0%, #D4F4E8 50%, #FFE0EC 100%);
     min-height: 100vh;
     padding-top: 80px;
+    transition: background 0.4s ease;
 }
 
 /* ===== МЕНЮ ===== */
@@ -35,17 +36,13 @@ body {
     font-weight: bold;
     color: #FF6B8A;
 }
-
-.menu-logo .green {
-    color: #4ECDC4;
-}
+.menu-logo .green { color: #4ECDC4; }
 
 .menu-links {
     display: flex;
     gap: 30px;
     list-style: none;
 }
-
 .menu-links a {
     text-decoration: none;
     color: #333;
@@ -54,10 +51,23 @@ body {
     padding: 5px 10px;
     border-radius: 20px;
 }
-
 .menu-links a:hover {
     color: #FF6B8A;
     background: #FFE0EC;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+.theme-toggle:hover {
+    background: rgba(255, 107, 138, 0.12);
+    transform: rotate(20deg);
 }
 
 /* ===== КОНТЕЙНЕР ===== */
@@ -76,41 +86,32 @@ body {
     margin-bottom: 30px;
     box-shadow: 0 10px 40px rgba(255, 107, 138, 0.15);
 }
-
 .hero-section h1 {
     font-size: 2.8rem;
     background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
 }
-
 .subtitle {
     color: #666;
     font-size: 1.2rem;
     margin-bottom: 20px;
 }
-
 .hero-stats {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
 }
-
 .stat-card {
     padding: 15px 30px;
     border-radius: 50px;
     font-weight: bold;
     color: white;
 }
-
-.stat-card.pink {
-    background: linear-gradient(135deg, #FF6B8A, #FF8FA3);
-}
-
-.stat-card.green {
-    background: linear-gradient(135deg, #4ECDC4, #6CD4C5);
-}
+.stat-card.pink { background: linear-gradient(135deg, #FF6B8A, #FF8FA3); }
+.stat-card.green { background: linear-gradient(135deg, #4ECDC4, #6CD4C5); }
+.stat-card.gradient { background: linear-gradient(135deg, #FF6B8A, #4ECDC4); }
 
 /* ===== ЗАДАЧИ ===== */
 .tasks-section {
@@ -120,7 +121,6 @@ body {
     margin-bottom: 30px;
     box-shadow: 0 10px 40px rgba(78, 205, 196, 0.15);
 }
-
 .tasks-section h2 {
     color: #333;
     margin-bottom: 20px;
@@ -131,7 +131,6 @@ body {
     gap: 15px;
     margin-bottom: 25px;
 }
-
 #taskInput {
     flex: 1;
     padding: 15px;
@@ -140,13 +139,11 @@ body {
     font-size: 1rem;
     transition: all 0.3s;
 }
-
 #taskInput:focus {
     outline: none;
     border-color: #FF6B8A;
     box-shadow: 0 0 20px rgba(255, 107, 138, 0.1);
 }
-
 #addTaskBtn {
     background: linear-gradient(135deg, #FF6B8A, #FF8FA3);
     color: white;
@@ -157,19 +154,17 @@ body {
     font-weight: bold;
     transition: all 0.3s;
 }
-
 #addTaskBtn:hover {
     transform: scale(1.02);
     box-shadow: 0 5px 20px rgba(255, 107, 138, 0.3);
 }
 
-/* ===== ФИЛЬТРЫ ===== */
 .filter-buttons {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
-
 .filter-btn {
     padding: 8px 20px;
     border: 2px solid #E8E8E8;
@@ -178,23 +173,19 @@ body {
     cursor: pointer;
     transition: all 0.3s;
 }
-
 .filter-btn.active {
     background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
     color: white;
     border-color: transparent;
 }
-
 .filter-btn:hover:not(.active) {
     border-color: #FF6B8A;
 }
 
-/* ===== СПИСОК ЗАДАЧ ===== */
 .task-list {
     list-style: none;
     margin-bottom: 20px;
 }
-
 .task-item {
     display: flex;
     align-items: center;
@@ -203,53 +194,51 @@ body {
     margin-bottom: 10px;
     border-radius: 15px;
     transition: all 0.3s;
-    animation: slideIn 0.3s ease;
     border-left: 4px solid #FF6B8A;
+    gap: 10px;
+    flex-wrap: wrap;
 }
-
 .task-item:nth-child(odd) {
     border-left-color: #4ECDC4;
 }
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
 .task-item.completed {
     opacity: 0.7;
     background: #F0F7F0;
     border-left-color: #4ECDC4;
 }
-
 .task-checkbox {
     width: 24px;
     height: 24px;
     margin-right: 15px;
     cursor: pointer;
     accent-color: #FF6B8A;
+    flex-shrink: 0;
 }
-
 .task-checkbox:checked {
     accent-color: #4ECDC4;
 }
-
 .task-text {
     flex: 1;
     font-size: 1rem;
+    word-break: break-word;
 }
-
 .task-item.completed .task-text {
     text-decoration: line-through;
     color: #999;
 }
-
+.task-timer {
+    font-size: 0.85rem;
+    color: #666;
+    background: #f0f0f0;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-weight: 500;
+}
+.task-timer.completed-timer {
+    background: #d4f4e8;
+    color: #2d8f85;
+}
 .task-delete {
     background: none;
     border: none;
@@ -259,12 +248,10 @@ body {
     border-radius: 10px;
     transition: background 0.3s;
 }
-
 .task-delete:hover {
     background: #FFE0EC;
 }
 
-/* ===== КНОПКА ОЧИСТКИ ===== */
 .clear-btn {
     width: 100%;
     padding: 12px;
@@ -276,7 +263,6 @@ body {
     font-weight: bold;
     transition: opacity 0.3s;
 }
-
 .clear-btn:hover {
     opacity: 0.85;
 }
@@ -289,64 +275,62 @@ body {
     margin-bottom: 30px;
     box-shadow: 0 10px 40px rgba(255, 107, 138, 0.15);
 }
-
 .stats-section h2 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
-
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
     margin-bottom: 30px;
 }
-
 .stat-item {
     padding: 20px;
     border-radius: 20px;
     text-align: center;
     font-weight: bold;
 }
-
 .stat-item.pink-bg {
     background: linear-gradient(135deg, #FF6B8A20, #FF8FA320);
     color: #FF6B8A;
 }
-
 .stat-item.green-bg {
     background: linear-gradient(135deg, #4ECDC420, #6CD4C520);
     color: #4ECDC4;
 }
-
 .stat-item.gradient-bg {
     background: linear-gradient(135deg, #FF6B8A15, #4ECDC415);
     color: #555;
 }
+.stat-item.time-bg {
+    background: linear-gradient(135deg, #FFD93D20, #FF6B8A20);
+    color: #d4940a;
+}
+.stat-item.avg-bg {
+    background: linear-gradient(135deg, #6C5CE720, #4ECDC420);
+    color: #5a3dbd;
+}
 
-/* ===== ДИАГРАММА ПРОДУКТИВНОСТИ ===== */
+/* ===== ДИАГРАММА ===== */
 .chart-section {
     margin-top: 30px;
     padding: 20px;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 20px;
 }
-
 .chart-section h3 {
     text-align: center;
     color: #333;
     margin-bottom: 15px;
-    font-size: 1.2rem;
 }
-
 .chart-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
 }
-
 .chart-bars {
     display: flex;
     justify-content: space-around;
@@ -358,7 +342,6 @@ body {
     border-radius: 15px;
     gap: 5px;
 }
-
 .chart-bar-wrapper {
     display: flex;
     flex-direction: column;
@@ -367,7 +350,6 @@ body {
     height: 100%;
     justify-content: flex-end;
 }
-
 .chart-bar {
     width: 100%;
     max-width: 40px;
@@ -375,27 +357,22 @@ body {
     border-radius: 8px 8px 0 0;
     transition: height 0.8s ease;
     background: linear-gradient(180deg, #FF6B8A, #FF8FA3);
-    position: relative;
 }
-
 .chart-bar.green-bar {
     background: linear-gradient(180deg, #4ECDC4, #6CD4C5);
 }
-
 .chart-bar-value {
     font-size: 0.7rem;
     font-weight: bold;
     color: #555;
     margin-bottom: 4px;
 }
-
 .chart-labels {
     display: flex;
     justify-content: space-around;
     width: 100%;
     padding: 0 5px;
 }
-
 .chart-label {
     flex: 1;
     text-align: center;
@@ -403,652 +380,12 @@ body {
     color: #888;
     font-weight: 500;
 }
-
 .chart-label.today {
     color: #FF6B8A;
     font-weight: bold;
 }
 
-/* ===== 3D КУБ ===== */
-.cube-3d {
-    margin-top: 30px;
-    text-align: center;
-}
-
-.cube {
-    width: 120px;
-    height: 120px;
-    position: relative;
-    margin: 20px auto;
-    transform-style: preserve-3d;
-    animation: spin 8s infinite linear;
-    cursor: pointer;
-}
-
-.face {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
-    border: 3px solid white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-}
-
-.front  { transform: translateZ(60px); }
-.back   { transform: rotateY(180deg) translateZ(60px); }
-.right  { transform: rotateY(90deg) translateZ(60px); }
-.left   { transform: rotateY(-90deg) translateZ(60px); }
-.top    { transform: rotateX(90deg) translateZ(60px); }
-.bottom { transform: rotateX(-90deg) translateZ(60px); }
-
-@keyframes spin {
-    0% { transform: rotateX(0) rotateY(0); }
-    100% { transform: rotateX(360deg) rotateY(360deg); }
-}
-
-.cube-text {
-    color: #666;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-/* ===== СТАТЬЯ ===== */
-.about-section {
-    background: white;
-    border-radius: 30px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 40px rgba(78, 205, 196, 0.15);
-}
-
-.about-section h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.article-content p {
-    margin-bottom: 15px;
-    line-height: 1.7;
-    color: #444;
-}
-
-.video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    margin-top: 25px;
-}
-
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
-}
-
-/* ===== ФУТЕР ===== */
-.footer {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-}
-
-/* ===== АДАПТИВ ===== */
-@media (max-width: 768px) {
-    body {
-        padding-top: 120px;
-    }
-    
-    .fixed-menu {
-        flex-direction: column;
-        gap: 10px;
-        padding: 12px 15px;
-    }
-    
-    .menu-links {
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .hero-section h1 {
-        font-size: 2rem;
-    }
-    
-    .hero-stats {
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-    }
-    
-    .task-input-group {
-        flex-direction: column;
-    }
-    
-    .filter-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .chart-bars {
-        height: 120px;
-    }
-    
-    .chart-bar {
-        max-width: 30px;
-    }
-    
-    .chart-label {
-        font-size: 0.65rem;
-    }
-    
-    .cube {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .face {
-        width: 80px;
-        height: 80px;
-        font-size: 1.8rem;
-    }
-    
-    .front  { transform: translateZ(40px); }
-    .back   { transform: rotateY(180deg) translateZ(40px); }
-    .right  { transform: rotateY(90deg) translateZ(40px); }
-    .left   { transform: rotateY(-90deg) translateZ(40px); }
-    .top    { transform: rotateX(90deg) translateZ(40px); }
-    .bottom { transform: rotateX(-90deg) translateZ(40px); }
-}
-
-@media (max-width: 480px) {
-    .hero-section h1 {
-        font-size: 1.5rem;
-    }
-    
-    .stat-card {
-        font-size: 0.9rem;
-        padding: 10px 20px;
-    }
-    
-    .task-text {
-        font-size: 0.9rem;
-    }
-
-    .chart-bars {
-        height: 100px;
-    }
-    
-    .chart-bar {
-        max-width: 25px;
-    }
-    
-    .chart-label {
-        font-size: 0.55rem;
-    }
-}
-/* ===== КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ ===== */
-.theme-toggle {
-    background: none;
-    border: none;
-    font-size: 1.4rem;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    color: #444;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-}
-
-.theme-toggle:hover {
-    background: rgba(255, 107, 138, 0.12);
-    transform: rotate(20deg) scale(1.1);
-}
-
-body.dark-theme .theme-toggle {
-    color: #f0f0f0;
-}
-
-.theme-transition {
-    transition: background 0.4s ease, color 0.3s ease;
-}
-/* ================================================================ */
-/* ========== ТЕМНАЯ ТЕМА (Dark Mode) ========== */
-/* ================================================================ */
-
-/* ---------- Активация через класс на body ---------- */
-body.dark-theme {
-    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 40%, #0d1a1a 100%);
-    color: #e0e0e0;
-}
-
-/* ---------- МЕНЮ ---------- */
-body.dark-theme .fixed-menu {
-    background: rgba(13, 13, 26, 0.97);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
-    border-bottom: 3px solid transparent;
-    border-image: linear-gradient(90deg, #FF6B8A, #4ECDC4) 1;
-}
-
-body.dark-theme .menu-logo {
-    color: #FF6B8A;
-}
-
-body.dark-theme .menu-links a {
-    color: #bbbbbb;
-}
-
-body.dark-theme .menu-links a:hover {
-    color: #FF6B8A;
-    background: rgba(255, 107, 138, 0.15);
-}
-
-/* ---------- КАРТОЧКИ (Hero, Задачи, Статистика, Статья) ---------- */
-body.dark-theme .hero-section,
-body.dark-theme .tasks-section,
-body.dark-theme .stats-section,
-body.dark-theme .about-section {
-    background: rgba(25, 25, 50, 0.92);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-body.dark-theme .hero-section h1 {
-    background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-body.dark-theme .subtitle {
-    color: #999999;
-}
-
-/* ---------- ЗАГОЛОВКИ ---------- */
-body.dark-theme .tasks-section h2,
-body.dark-theme .stats-section h2,
-body.dark-theme .about-section h2,
-body.dark-theme .chart-section h3 {
-    color: #f0f0f0;
-}
-
-/* ---------- ПОЛЕ ВВОДА ---------- */
-body.dark-theme #taskInput {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 107, 138, 0.25);
-    color: #e0e0e0;
-}
-
-body.dark-theme #taskInput:focus {
-    border-color: #FF6B8A;
-    box-shadow: 0 0 25px rgba(255, 107, 138, 0.12);
-}
-
-body.dark-theme #taskInput::placeholder {
-    color: #666666;
-}
-
-/* ---------- КНОПКА ДОБАВЛЕНИЯ ---------- */
-body.dark-theme #addTaskBtn {
-    background: linear-gradient(135deg, #FF6B8A, #d94f6e);
-}
-
-body.dark-theme #addTaskBtn:hover {
-    box-shadow: 0 5px 25px rgba(255, 107, 138, 0.35);
-    transform: scale(1.03);
-}
-
-/* ---------- ФИЛЬТРЫ ---------- */
-body.dark-theme .filter-btn {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.12);
-    color: #bbbbbb;
-}
-
-body.dark-theme .filter-btn.active {
-    background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
-    color: white;
-    border-color: transparent;
-}
-
-body.dark-theme .filter-btn:hover:not(.active) {
-    border-color: #FF6B8A;
-    background: rgba(255, 107, 138, 0.08);
-}
-
-/* ---------- СПИСОК ЗАДАЧ ---------- */
-body.dark-theme .task-item {
-    background: rgba(255, 255, 255, 0.04);
-    border-left-color: #FF6B8A;
-}
-
-body.dark-theme .task-item:nth-child(odd) {
-    border-left-color: #4ECDC4;
-}
-
-body.dark-theme .task-item.completed {
-    background: rgba(78, 205, 196, 0.07);
-    border-left-color: #4ECDC4;
-    opacity: 0.75;
-}
-
-body.dark-theme .task-item.completed .task-text {
-    color: #777777;
-}
-
-body.dark-theme .task-text {
-    color: #e0e0e0;
-}
-
-/* ---------- ЧЕКБОКС ---------- */
-body.dark-theme .task-checkbox {
-    accent-color: #FF6B8A;
-}
-
-body.dark-theme .task-checkbox:checked {
-    accent-color: #4ECDC4;
-}
-
-/* ---------- КНОПКА УДАЛЕНИЯ ---------- */
-body.dark-theme .task-delete:hover {
-    background: rgba(255, 107, 138, 0.18);
-}
-
-/* ---------- КНОПКА ОЧИСТКИ ---------- */
-body.dark-theme .clear-btn {
-    background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
-}
-
-body.dark-theme .clear-btn:hover {
-    opacity: 0.85;
-}
-
-/* ---------- СТАТИСТИКА ---------- */
-body.dark-theme .stat-item.pink-bg {
-    background: linear-gradient(135deg, rgba(255, 107, 138, 0.15), rgba(255, 143, 163, 0.08));
-    color: #ff8fa3;
-}
-
-body.dark-theme .stat-item.green-bg {
-    background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(108, 212, 197, 0.08));
-    color: #6cd4c5;
-}
-
-body.dark-theme .stat-item.gradient-bg {
-    background: linear-gradient(135deg, rgba(255, 107, 138, 0.08), rgba(78, 205, 196, 0.08));
-    color: #bbbbbb;
-}
-
-/* ---------- ДИАГРАММА ---------- */
-body.dark-theme .chart-section {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-body.dark-theme .chart-bars {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-body.dark-theme .chart-bar-value {
-    color: #aaaaaa;
-}
-
-body.dark-theme .chart-label {
-    color: #888888;
-}
-
-body.dark-theme .chart-label.today {
-    color: #FF6B8A;
-}
-
-/* ---------- 3D КУБ ---------- */
-body.dark-theme .face {
-    background: linear-gradient(135deg, #2a2a5e, #1a3a3a);
-    border-color: rgba(255, 255, 255, 0.10);
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-theme .cube-text {
-    color: #888888;
-}
-
-/* ---------- СТАТЬЯ ---------- */
-body.dark-theme .article-content p {
-    color: #bbbbbb;
-}
-
-/* ---------- ФУТЕР ---------- */
-body.dark-theme .footer {
-    background: rgba(20, 20, 40, 0.85);
-    color: #777777;
-}
-
-/* ---------- ПУСТОЕ СОСТОЯНИЕ ---------- */
-body.dark-theme .empty-state {
-    color: #777777;
-}
-
-/* ---------- КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ ---------- */
-body.dark-theme .theme-toggle {
-    color: #f0f0f0;
-}
-
-/* ---------- ПЛАВНЫЙ ПЕРЕХОД ---------- */
-body.dark-theme,
-body.dark-theme .fixed-menu,
-body.dark-theme .hero-section,
-body.dark-theme .tasks-section,
-body.dark-theme .stats-section,
-body.dark-theme .about-section,
-body.dark-theme .task-item,
-body.dark-theme .chart-section,
-body.dark-theme .chart-bars {
-    transition: background 0.5s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* ================================================================ */
-/* ========== АДАПТИВ ТЕМНОЙ ТЕМЫ ========== */
-/* ================================================================ */
-
-@media (max-width: 768px) {
-    body.dark-theme .fixed-menu {
-        background: rgba(13, 13, 26, 0.98);
-    }
-    
-    body.dark-theme .hero-section,
-    body.dark-theme .tasks-section,
-    body.dark-theme .stats-section,
-    body.dark-theme .about-section {
-        background: rgba(20, 20, 45, 0.95);
-    }
-}
-
-@media (max-width: 480px) {
-    body.dark-theme .hero-section,
-    body.dark-theme .tasks-section,
-    body.dark-theme .stats-section,
-    body.dark-theme .about-section {
-        background: rgba(18, 18, 40, 0.97);
-    }
-}
-/* ================================================================ */
-/* ===== ПАСХАЛКА — ИСПРАВЛЕННАЯ ===== */
-/* ================================================================ */
-
-.easter-egg-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.95);
-    display: none !important;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 99999;
-    padding: 20px;
-}
-
-.easter-egg-overlay.active {
-    display: flex !important;
-    animation: brainrotFadeIn 0.5s ease;
-}
-
-@keyframes brainrotFadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.easter-egg-content {
-    text-align: center;
-    max-width: 800px;
-    width: 100%;
-    animation: brainrotPulse 2s ease-in-out infinite;
-}
-
-@keyframes brainrotPulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.02);
-    }
-}
-
-.easter-egg-meme {
-    font-size: 8rem;
-    line-height: 1.2;
-    margin-bottom: 20px;
-    animation: brainrotShake 3s ease-in-out infinite;
-}
-
-@keyframes brainrotShake {
-    0%, 100% {
-        transform: rotate(-3deg) scale(1);
-    }
-    25% {
-        transform: rotate(3deg) scale(1.05);
-    }
-    50% {
-        transform: rotate(-3deg) scale(1);
-    }
-    75% {
-        transform: rotate(3deg) scale(1.05);
-    }
-}
-
-.easter-egg-text {
-    color: #fff;
-    font-size: 2.5rem;
-    font-weight: bold;
-    text-shadow: 0 0 30px rgba(255, 107, 138, 0.5);
-    margin-bottom: 10px;
-    animation: brainrotTextGlow 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes brainrotTextGlow {
-    0% {
-        text-shadow: 0 0 20px #FF6B8A, 0 0 40px #FF6B8A;
-        color: #FF6B8A;
-    }
-    50% {
-        text-shadow: 0 0 30px #4ECDC4, 0 0 60px #4ECDC4;
-        color: #4ECDC4;
-    }
-    100% {
-        text-shadow: 0 0 20px #FFD93D, 0 0 40px #FFD93D;
-        color: #FFD93D;
-    }
-}
-
-.easter-egg-subtext {
-    color: #888;
-    font-size: 1.2rem;
-    margin-top: 10px;
-    opacity: 0.7;
-}
-
-.easter-egg-close {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    font-size: 2rem;
-    padding: 10px 20px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s;
-    z-index: 100000;
-}
-
-.easter-egg-close:hover {
-    background: rgba(255, 107, 138, 0.3);
-    border-color: #FF6B8A;
-    transform: rotate(90deg);
-}
-
-/* Брейкпоинты для адаптива */
-@media (max-width: 768px) {
-    .easter-egg-meme {
-        font-size: 4rem;
-    }
-    
-    .easter-egg-text {
-        font-size: 1.8rem;
-    }
-    
-    .easter-egg-subtext {
-        font-size: 1rem;
-    }
-    
-    .easter-egg-close {
-        top: 15px;
-        right: 15px;
-        font-size: 1.5rem;
-        padding: 8px 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .easter-egg-meme {
-        font-size: 3rem;
-    }
-    
-    .easter-egg-text {
-        font-size: 1.4rem;
-    }
-}
-/* ================================================================ */
 /* ===== ДОСТИЖЕНИЯ ===== */
-/* ================================================================ */
-
 .achievements-section {
     background: white;
     border-radius: 30px;
@@ -1056,20 +393,17 @@ body.dark-theme .chart-bars {
     margin-bottom: 30px;
     box-shadow: 0 10px 40px rgba(255, 107, 138, 0.15);
 }
-
 .achievements-section h2 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
-
 .achievements-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
     margin-bottom: 25px;
 }
-
 .achievement-card {
     background: #f8f8f8;
     border-radius: 16px;
@@ -1077,82 +411,49 @@ body.dark-theme .chart-bars {
     text-align: center;
     transition: all 0.3s ease;
     border: 2px solid #eee;
-    position: relative;
-    overflow: hidden;
 }
-
 .achievement-card.unlocked {
     background: linear-gradient(135deg, rgba(255, 107, 138, 0.10), rgba(78, 205, 196, 0.10));
     border-color: #4ECDC4;
-    animation: achievementUnlock 0.6s ease;
 }
-
-@keyframes achievementUnlock {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
 .achievement-card.locked {
-    opacity: 0.6;
+    opacity: 0.5;
     filter: grayscale(0.5);
 }
-
-.achievement-card.locked .achievement-icon {
-    filter: grayscale(1);
-}
-
 .achievement-icon {
     font-size: 2.5rem;
     margin-bottom: 8px;
 }
-
 .achievement-name {
     font-weight: bold;
     font-size: 1rem;
     color: #333;
-    margin-bottom: 4px;
 }
-
 .achievement-desc {
     font-size: 0.8rem;
     color: #888;
-    margin-bottom: 8px;
 }
-
 .achievement-status {
     font-size: 0.75rem;
     font-weight: 600;
+    margin-top: 5px;
 }
-
 .achievement-card.unlocked .achievement-status {
     color: #4ECDC4;
 }
-
 .achievement-card.locked .achievement-status {
     color: #bbb;
 }
 
-/* ===== ПРОГРЕСС-БАР ДОСТИЖЕНИЙ ===== */
 .achievement-progress {
     text-align: center;
     padding: 10px 0;
 }
-
 .achievement-progress p {
     color: #555;
     font-weight: 500;
     margin-bottom: 8px;
 }
-
 .progress-bar-bg {
     background: #eee;
     border-radius: 20px;
@@ -1161,7 +462,6 @@ body.dark-theme .chart-bars {
     max-width: 400px;
     margin: 0 auto;
 }
-
 .progress-bar-fill {
     height: 100%;
     background: linear-gradient(90deg, #FF6B8A, #4ECDC4, #FFD93D);
@@ -1170,7 +470,7 @@ body.dark-theme .chart-bars {
     width: 0%;
 }
 
-/* ===== УВЕДОМЛЕНИЕ О ДОСТИЖЕНИИ ===== */
+/* ===== УВЕДОМЛЕНИЯ ===== */
 .achievement-notification {
     position: fixed;
     bottom: 30px;
@@ -1190,30 +490,16 @@ body.dark-theme .chart-bars {
     z-index: 99998;
     cursor: pointer;
 }
-
 .achievement-notification.show {
     transform: translateX(0);
 }
-
 .achievement-notif-icon {
     font-size: 2.5rem;
     flex-shrink: 0;
-    animation: achievementNotifPop 1s ease infinite;
 }
-
-@keyframes achievementNotifPop {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.15) rotate(-5deg);
-    }
-}
-
 .achievement-notif-content {
     flex: 1;
 }
-
 .achievement-notif-title {
     font-size: 0.7rem;
     color: #FFD93D;
@@ -1221,113 +507,142 @@ body.dark-theme .chart-bars {
     letter-spacing: 2px;
     font-weight: 600;
 }
-
 .achievement-notif-name {
     font-size: 1.1rem;
     font-weight: bold;
     color: #fff;
-    margin: 2px 0;
 }
-
 .achievement-notif-desc {
     font-size: 0.8rem;
     color: #aaa;
 }
 
-/* ===== ТЕМНАЯ ТЕМА ДЛЯ ДОСТИЖЕНИЙ ===== */
+.empty-state {
+    text-align: center;
+    color: #999;
+    padding: 30px;
+    font-size: 1.1rem;
+}
+
+/* ===== ФУТЕР ===== */
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+}
+
+/* ===== ТЕМНАЯ ТЕМА ===== */
+body.dark-theme {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 40%, #0d1a1a 100%);
+    color: #e0e0e0;
+}
+body.dark-theme .fixed-menu {
+    background: rgba(13, 13, 26, 0.97);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+}
+body.dark-theme .menu-links a {
+    color: #bbbbbb;
+}
+body.dark-theme .menu-links a:hover {
+    color: #FF6B8A;
+    background: rgba(255, 107, 138, 0.15);
+}
+body.dark-theme .hero-section,
+body.dark-theme .tasks-section,
+body.dark-theme .stats-section,
 body.dark-theme .achievements-section {
     background: rgba(25, 25, 50, 0.92);
-    backdrop-filter: blur(8px);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
-body.dark-theme .achievements-section h2 {
-    color: #f0f0f0;
+body.dark-theme .task-item {
+    background: rgba(255, 255, 255, 0.04);
 }
-
+body.dark-theme .task-item.completed {
+    background: rgba(78, 205, 196, 0.07);
+}
+body.dark-theme .task-text {
+    color: #e0e0e0;
+}
+body.dark-theme .task-timer {
+    background: rgba(255, 255, 255, 0.08);
+    color: #aaa;
+}
+body.dark-theme .task-timer.completed-timer {
+    background: rgba(78, 205, 196, 0.2);
+    color: #6CD4C5;
+}
+body.dark-theme .stat-item.gradient-bg {
+    color: #bbbbbb;
+}
+body.dark-theme .chart-section {
+    background: rgba(255, 255, 255, 0.05);
+}
+body.dark-theme .chart-bars {
+    background: rgba(255, 255, 255, 0.05);
+}
+body.dark-theme .chart-label {
+    color: #888;
+}
 body.dark-theme .achievement-card {
     background: rgba(255, 255, 255, 0.04);
     border-color: rgba(255, 255, 255, 0.08);
 }
-
 body.dark-theme .achievement-card.unlocked {
     background: linear-gradient(135deg, rgba(255, 107, 138, 0.12), rgba(78, 205, 196, 0.12));
     border-color: #4ECDC4;
 }
-
-body.dark-theme .achievement-card.locked {
-    opacity: 0.4;
-}
-
 body.dark-theme .achievement-name {
     color: #e0e0e0;
 }
-
 body.dark-theme .achievement-desc {
     color: #777;
 }
-
 body.dark-theme .achievement-progress p {
     color: #aaa;
 }
-
 body.dark-theme .progress-bar-bg {
     background: rgba(255, 255, 255, 0.08);
 }
-
-body.dark-theme .achievement-notification {
-    background: rgba(20, 20, 45, 0.97);
-    border-color: rgba(255, 255, 255, 0.08);
+body.dark-theme .footer {
+    background: rgba(20, 20, 40, 0.85);
+    color: #777;
+}
+body.dark-theme .theme-toggle {
+    color: #f0f0f0;
 }
 
 /* ===== АДАПТИВ ===== */
 @media (max-width: 768px) {
-    .achievements-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    body { padding-top: 120px; }
+    .fixed-menu {
+        flex-direction: column;
         gap: 10px;
+        padding: 12px 15px;
     }
-    
-    .achievement-card {
-        padding: 15px;
+    .menu-links {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
-    
-    .achievement-icon {
-        font-size: 2rem;
-    }
-    
-    .achievement-notification {
-        bottom: 20px;
-        right: 20px;
-        left: 20px;
-        max-width: none;
-        padding: 15px 20px;
-    }
-    
-    .achievement-notif-icon {
-        font-size: 2rem;
-    }
+    .hero-section h1 { font-size: 2rem; }
+    .hero-stats { flex-direction: column; align-items: center; gap: 15px; }
+    .task-input-group { flex-direction: column; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .chart-bars { height: 120px; }
+    .chart-bar { max-width: 30px; }
+    .achievements-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 }
-
 @media (max-width: 480px) {
-    .achievements-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-    }
-    
-    .achievement-card {
-        padding: 12px;
-    }
-    
-    .achievement-icon {
-        font-size: 1.6rem;
-    }
-    
-    .achievement-name {
-        font-size: 0.85rem;
-    }
-    
-    .achievement-desc {
-        font-size: 0.7rem;
-    }
+    .hero-section h1 { font-size: 1.5rem; }
+    .stat-card { font-size: 0.9rem; padding: 10px 20px; }
+    .task-text { font-size: 0.9rem; }
+    .chart-bars { height: 100px; }
+    .chart-bar { max-width: 25px; }
+    .chart-label { font-size: 0.55rem; }
+    .achievements-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .achievement-card { padding: 12px; }
+    .achievement-icon { font-size: 1.8rem; }
 }
