@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -47,6 +47,7 @@
         <li><a href="#home">Главная</a></li>
         <li><a href="#tasks">Задачи</a></li>
         <li><a href="#stats">Статистика</a></li>
+        <li><a href="#achievements">Достижения</a></li>
         <li><a href="#about">О проекте</a></li>
     </ul>
     <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">🌙</button>
@@ -104,22 +105,23 @@
                 </div>
             </div>
         </div>
-          <!--  КНОПКА 67  -->
-    <div style="text-align: center; margin: 20px 0;">
-        <button id="easterEggBtn" style="
-            background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(255, 107, 138, 0.3);
-        ">🔮 67</button>
-        <p style="color: #999; font-size: 0.8rem; margin-top: 5px;">нажми на 67!</p>
-    </div>
+        
+        <!--  КНОПКА 67  -->
+        <div style="text-align: center; margin: 20px 0;">
+            <button id="easterEggBtn" style="
+                background: linear-gradient(135deg, #FF6B8A, #4ECDC4);
+                color: white;
+                border: none;
+                padding: 15px 40px;
+                border-radius: 50px;
+                font-size: 1.5rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 20px rgba(255, 107, 138, 0.3);
+            ">🔮 67</button>
+            <p style="color: #999; font-size: 0.8rem; margin-top: 5px;">нажми на 67!</p>
+        </div>
         
         <!-- 3D КУБИК с рабочими эмодзиками -->
         <div class="cube-3d">
@@ -132,6 +134,20 @@
                 <div class="face bottom">✅</div>
             </div>
             <p class="cube-text">3D-достижения</p>
+        </div>
+    </section>
+
+    <!-- ===== ДОСТИЖЕНИЯ ===== -->
+    <section id="achievements" class="achievements-section">
+        <h2>🏅 Мои достижения</h2>
+        <div class="achievements-grid" id="achievementsGrid">
+            <!-- Достижения будут вставляться JS -->
+        </div>
+        <div class="achievement-progress">
+            <p>Всего достижений: <span id="achievementTotal">0</span> из <span id="achievementMax">0</span></p>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="achievementProgress" style="width: 0%;"></div>
+            </div>
         </div>
     </section>
 
