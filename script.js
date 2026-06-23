@@ -1,15 +1,11 @@
-// ================================================================
-// ===== ДАННЫЕ =====
-// ================================================================
+// данные
 
 let tasks = [];
 let currentFilter = 'all';
 let unlockedAchievements = [];
 let activeTimers = {};
 
-// ================================================================
-// ===== ДОСТИЖЕНИЯ =====
-// ================================================================
+// достижения
 
 const ACHIEVEMENTS = [
     { id: 'first_task', name: 'Первый шаг', desc: 'Выполнить 1 задачу', icon: '🌟', check: s => s.total >= 1 },
@@ -32,9 +28,7 @@ let streak = 0;
 let lastDate = null;
 let clearedAll = false;
 
-// ================================================================
 // ===== ЗАГРУЗКА / СОХРАНЕНИЕ =====
-// ================================================================
 
 function loadData() {
     const saved = localStorage.getItem('tasks');
@@ -62,9 +56,7 @@ function saveData() {
     }));
 }
 
-// ================================================================
 // ===== ОТРИСОВКА =====
-// ================================================================
 
 function renderAll() {
     renderTasks();
@@ -205,9 +197,7 @@ function startTimers() {
     });
 }
 
-// ================================================================
-// ===== СТАТИСТИКА =====
-// ================================================================
+// статистикка
 
 function updateStats() {
     const total = tasks.length;
@@ -231,9 +221,7 @@ function updateStats() {
     document.getElementById('avgTimeStat').textContent = Math.round(avg / 60);
 }
 
-// ================================================================
-// ===== ДИАГРАММА =====
-// ================================================================
+// диаграмма
 
 function renderChart() {
     const bars = document.getElementById('chartBars');
@@ -411,9 +399,7 @@ function showNotification(ach) {
     });
 }
 
-// ================================================================
-// ===== ДЕЙСТВИЯ С ЗАДАЧАМИ =====
-// ================================================================
+//действия с задачами
 
 function addTask() {
     const input = document.getElementById('taskInput');
@@ -444,9 +430,7 @@ function clearCompleted() {
     checkAchievements();
 }
 
-// ================================================================
-// ===== ТЕМНАЯ ТЕМА =====
-// ================================================================
+// дарк темка
 
 document.getElementById('themeToggle').addEventListener('click', () => {
     document.body.classList.toggle('dark-theme');
@@ -459,12 +443,68 @@ if (localStorage.getItem('theme') === 'dark') {
     document.getElementById('themeToggle').textContent = '☀️';
 }
 
-// ================================================================
-// ===== ИНИЦИАЛИЗАЦИЯ =====
-// ================================================================
+// посхалко
+
+function showBrainrotMeme() {
+    if (document.querySelector('.easter-egg-overlay')) return;
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'easter-egg-overlay active';
+    overlay.innerHTML = `
+        <button class="easter-egg-close" id="easterEggClose">✕</button>
+        <div class="easter-egg-content">
+            <div class="easter-egg-meme">🤡🔥💀</div>
+            <div class="easter-egg-text">БРЕЙНРОТ 67 💀</div>
+            <div class="easter-egg-subtext">Ты нашёл пасхалку! 🎉</div>
+            <div style="margin-top: 30px; font-size: 3rem; animation: brainrotShake 2s ease-in-out infinite;">🗿 Skibidi Toilet Rizz 🗿</div>
+            <div style="margin-top: 15px; color: #666; font-size: 0.9rem; letter-spacing: 2px;">═══════ ⋆★⋆ ═══════</div>
+            <div style="margin-top: 15px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <span style="font-size: 2rem;">🧠</span>
+                <span style="font-size: 2rem; animation: brainrotPulse 1.5s ease-in-out infinite;">⚡</span>
+                <span style="font-size: 2rem;">🤯</span>
+                <span style="font-size: 2rem; animation: brainrotPulse 2s ease-in-out infinite;">🌀</span>
+                <span style="font-size: 2rem;">👾</span>
+            </div>
+            <div style="margin-top: 20px; color: #555; font-size: 0.8rem;">(нажмите ✕ или кликните в любом месте, чтобы закрыть)</div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    document.getElementById('easterEggClose').addEventListener('click', () => {
+        overlay.remove();
+        document.body.style.overflow = '';
+    });
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            overlay.remove();
+            document.body.style.overflow = '';
+        }
+    });
+    document.body.style.overflow = 'hidden';
+}
+
+function initEasterEgg() {
+    const title = document.getElementById('easterEggTitle');
+    if (!title) return;
+    
+    let clickCount = 0, clickTimer = null;
+    title.addEventListener('click', function() {
+        clickCount++;
+        clearTimeout(clickTimer);
+        if (clickCount >= 3) {
+            showBrainrotMeme();
+            clickCount = 0;
+        } else {
+            clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
+        }
+    });
+}
+
+// инициализация
 
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
+    initEasterEgg();
     
     document.getElementById('addTaskBtn').addEventListener('click', addTask);
     document.getElementById('taskInput').addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
