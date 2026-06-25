@@ -23,6 +23,7 @@
 - [Демо на хостинге](https://taskflow.insajdd41.workers.dev/)
 - [Figma](https://www.figma.com/make/AM3QFm9rexxlI5yMKheMYG/Create-Website?t=EENDlWmWcFSy3Dbi-20&fullscreen=1)
 - [Flip](https://flip-chart.ru/app/board?spaceId=01KV7W502RJJJ6V4R5H4MD3218&teamId=01KV7W502Z1W60A45PNSTX12J4&flipId=01KVJJ0FXQYEBSHZW6RBECNZ4D)
+- [Таблица тестирования](https://docs.google.com/spreadsheets/d/1kOYpUkKwF9Rf8VcXKl2kpnzXsUKJHa_OWNtkXzLdhvQ/edit?usp=sharing)
 
 ## Команда
 Софья, Никита, Илья
